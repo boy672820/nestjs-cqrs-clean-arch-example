@@ -1,7 +1,7 @@
 import { Body, Controller, Param, Post, Req } from '@nestjs/common';
-import { Auth } from '../auth/decorators/auth.decorator';
+import { Auth } from '../../auth/decorators/auth.decorator';
 import { WithdrawDto } from './dto/withdraw.dto';
-import { AccountService } from './account.service';
+import { AccountService } from '../account.service';
 
 @Controller('account')
 export class AccountController {

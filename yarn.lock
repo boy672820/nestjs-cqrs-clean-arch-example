@@ -718,6 +718,13 @@
     path-to-regexp "3.2.0"
     tslib "2.5.3"
 
+"@nestjs/cqrs@^10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@nestjs/cqrs/-/cqrs-10.1.0.tgz#96489842b1ef4919b0a749c7780c694182819709"
+  integrity sha512-jq0Q7x/U9hHkh+BPVwOAyRGFALV8Ulz79zg4Kw/KoydpLnz8qwQesqs5Cut8yTP7JHHotFg7LN17iz+ZvTjLew==
+  dependencies:
+    uuid "9.0.0"
+
 "@nestjs/platform-express@^9.0.0":
   version "9.4.3"
   resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-9.4.3.tgz#f61b75686bdfce566be3b54fa7bb20a4d87ed619"
@@ -4566,6 +4573,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
+
+uuid@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

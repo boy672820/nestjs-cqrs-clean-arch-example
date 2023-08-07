@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { WithdrawDto } from './dto/withdraw.dto';
+import { WithdrawDto } from './interface/dto/withdraw.dto';
 import { AccountRepository } from './account.repository';
 import { Receipt } from '../db/receipts';
 
