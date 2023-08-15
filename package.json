@@ -18,6 +18,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boy672820/nestjs-cqrs-clean-arch-example"
+  },
   "dependencies": {
     "@mikro-orm/core": "^5.7.14",
     "@mikro-orm/nestjs": "^5.2.0",
@@ -30,6 +34,7 @@
     "rxjs": "^7.2.0"
   },
   "devDependencies": {
+    "@mikro-orm/cli": "^5.7.14",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
@@ -68,5 +73,12 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
   }
 }

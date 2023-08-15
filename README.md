@@ -28,7 +28,7 @@ The CQRS pattern separates the responsibility of commands and queries to enhance
 
 ## Getting Started
 
-Refer to the README in each directory to learn how to build and run each microservice and the API gateway individually.
+![erd](./erd.png)
 
 ## Contributing
 
