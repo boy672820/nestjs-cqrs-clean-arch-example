@@ -1,10 +1,9 @@
 {
-  "name": "banking",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "name": "nestjs-cqrs-clean-arch-example",
+  "version": "1.0.0",
+  "description": "NestJS CQRS Clean Architecture Example",
+  "author": "boy672820",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -20,6 +19,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@mikro-orm/core": "^5.7.14",
+    "@mikro-orm/nestjs": "^5.2.0",
+    "@mikro-orm/postgresql": "^5.7.14",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/cqrs": "^10.1.0",
