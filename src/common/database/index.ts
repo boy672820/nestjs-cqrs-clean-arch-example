@@ -1,1 +1,1 @@
-export * from './timestamp.entity.abstract';
+export * from './timestamp.entity';

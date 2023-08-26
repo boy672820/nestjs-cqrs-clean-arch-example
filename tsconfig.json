@@ -18,10 +18,30 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@module/*": ["src/modules/*"],
-      "@module": ["src/modules"],
-      "@common/*": ["src/common/*"],
-      "@common": ["src/common"]
+      "@module/*": [
+        "src/modules/*"
+      ],
+      "@module": [
+        "src/modules"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@common": [
+        "src/common"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@config": [
+        "src/config"
+      ],
+      "@libs/auth": [
+        "libs/auth/src"
+      ],
+      "@libs/auth/*": [
+        "libs/auth/src/*"
+      ]
     }
   }
 }
