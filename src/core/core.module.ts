@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseModule } from './database';
+import { AuthModule } from '@libs/auth';
+import { AuthBasicService, DatabaseModule } from './database';
 import { validate } from './env.validator';
+import { User } from '@common/database/entities';
 
 @Module({
   imports: [
@@ -10,7 +12,14 @@ import { validate } from './env.validator';
       validate,
       envFilePath: '.env',
     }),
-    DatabaseModule,
+    DatabaseModule.forRoot(),
+    AuthModule.forRootAsync({
+      useClass: AuthBasicService,
+      imports: [
+        DatabaseModule.forRoot(),
+        DatabaseModule.forFeature({ entities: [User] }),
+      ],
+    }),
   ],
 })
 export class CoreModule {}

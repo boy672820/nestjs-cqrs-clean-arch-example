@@ -1,5 +1,5 @@
 import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { Timestamp } from '@common/database';
+import { Timestamp } from '@common/database/entities';
 import { Account } from './account.entity';
 
 @Entity({ tableName: 'users' })

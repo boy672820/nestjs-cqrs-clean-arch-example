@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { PickType } from '@nestjs/swagger';
-import { Timestamp } from '@common/database';
+import { Timestamp } from '@common/database/entities';
 import { Account } from './account.entity';
 
 @Entity({ tableName: 'transactions' })
