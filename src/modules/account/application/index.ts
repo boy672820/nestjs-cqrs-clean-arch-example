@@ -1,1 +1,1 @@
-export * from './commands/create-account.handler';
+export * from './commands/create-wallet.handler';

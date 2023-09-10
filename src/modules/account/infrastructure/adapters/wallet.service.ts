@@ -1,27 +1,14 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { DerivedAccount } from '../../domain/account';
-import { WalletConfigService } from '../../../../config';
+import { Injectable } from '@nestjs/common';
 import { HDNodeWallet } from 'ethers';
 import type { IWalletService } from '../../application/adapters/wallet.service.interface';
 
 @Injectable()
-export class WalletService implements IWalletService, OnModuleInit {
-  private hdNode: HDNodeWallet;
-
-  constructor(private readonly walletConfig: WalletConfigService) {}
-
-  onModuleInit() {
-    this.hdNode = HDNodeWallet.fromPhrase(
-      this.walletConfig.phrase,
-      this.walletConfig.password,
-    );
-  }
-
-  createAccount(index: number | bigint): DerivedAccount {
-    const childAddress = this.hdNode.deriveChild(index);
+export class WalletService implements IWalletService {
+  createWallet(password: string) {
+    const hdnode = HDNodeWallet.createRandom(password);
     return {
-      address: childAddress.address,
-      privkey: childAddress.privateKey,
+      phrase: hdnode.mnemonic.phrase,
+      address: hdnode.deriveChild(0).address,
     };
   }
 }

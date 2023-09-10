@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBasicAuth,
@@ -6,8 +6,9 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
+import { CreateWalletDto } from './dto';
+import { CreateWalletCommand } from '../application/commands/create-wallet.command';
 import type { UserPayload } from '@libs/auth';
-import { CreateAccountCommand } from '../application/commands/create-account.command';
 
 @Controller('account')
 export class AccountController {
@@ -20,6 +21,12 @@ export class AccountController {
     schema: {
       type: 'object',
       properties: {
+        phrase: {
+          type: 'string',
+          description: 'Wallet phrase',
+          example:
+            'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat',
+        },
         id: {
           type: 'string',
           format: 'ulid',
@@ -48,7 +55,9 @@ export class AccountController {
     },
   })
   @Post()
-  createAccount(@User() user: UserPayload) {
-    return this.commandBus.execute(new CreateAccountCommand(user.id));
+  createWallet(@User() user: UserPayload, @Body() dto: CreateWalletDto) {
+    return this.commandBus.execute(
+      new CreateWalletCommand(user.id, dto.password),
+    );
   }
 }

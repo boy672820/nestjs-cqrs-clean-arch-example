@@ -1,5 +1,11 @@
-import type { DerivedAccount } from '../../domain/account';
+import type { CreatedWallet } from '../../domain/account';
 
 export interface IWalletService {
-  createAccount(index: number | bigint): DerivedAccount;
+  /**
+   * Create a wallet
+   *
+   * @param password - The password to encrypt the wallet
+   * @returns The created wallet
+   */
+  createWallet(password: string): CreatedWallet;
 }

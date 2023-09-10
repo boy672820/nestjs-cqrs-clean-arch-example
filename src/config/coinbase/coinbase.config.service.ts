@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 const prefix = (key: string) => `wallet.${key}`;
 
 @Injectable()
-export class WalletConfigService {
+export class CoinbaseConfigService {
   constructor(private readonly config: ConfigService) {}
 
   get phrase(): string {

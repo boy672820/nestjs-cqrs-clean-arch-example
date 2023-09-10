@@ -1,28 +1,34 @@
 import {
   Entity,
+  EntityRepositoryType,
   ManyToOne,
   OneToMany,
   PrimaryKey,
   Property,
+  Unique,
 } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
+import { AccountRepository } from '../repositories';
 import { User } from './user.entity';
 import { Transaction } from './transaction.entity';
 
-@Entity({ tableName: 'accounts' })
+@Entity({ tableName: 'accounts', customRepository: () => AccountRepository })
 export class Account extends Timestamp {
+  [EntityRepositoryType]?: AccountRepository;
+
   @PrimaryKey({
     type: 'uuid',
     defaultRaw: 'uuid_generate_v4()',
     name: 'account_id',
   })
-  readonly id!: string;
+  id!: string;
 
-  // @Property({ type: 'uuid', name: 'user_id', hidden: true })
-  // readonly userId!: string;
+  @Unique({ name: 'accounts_user_id_index', properties: ['index', 'user'] })
+  @Property({ type: 'integer', name: 'index' })
+  index!: number;
 
   @Property({ type: 'text', unique: true, name: 'account_address' })
-  readonly address!: string;
+  accountAddress!: string;
 
   @Property({
     type: 'numeric',
@@ -31,14 +37,14 @@ export class Account extends Timestamp {
     scale: 0,
     name: 'balance',
   })
-  readonly balance!: string;
+  balance!: string;
 
   @ManyToOne(() => User, { fieldName: 'user_id' })
-  readonly user!: User;
+  user!: User;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)
-  readonly senderTxs!: Transaction[];
+  senderTxs!: Transaction[];
 
   @OneToMany(() => Transaction, (transaction) => transaction.recipient)
-  readonly recipientTxs!: Transaction[];
+  recipientTxs!: Transaction[];
 }
