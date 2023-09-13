@@ -6,6 +6,7 @@ import type { IWalletService } from '../../application/adapters/wallet.service.i
 export class WalletService implements IWalletService {
   createWallet(password: string) {
     const hdnode = HDNodeWallet.createRandom(password);
+    console.log(hdnode);
     return {
       phrase: hdnode.mnemonic.phrase,
       address: hdnode.deriveChild(0).address,

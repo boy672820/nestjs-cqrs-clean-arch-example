@@ -4,30 +4,30 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryKey,
+  PrimaryKeyType,
   Property,
-  Unique,
 } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
 import { AccountRepository } from '../repositories';
-import { User } from './user.entity';
+import { Wallet } from './wallet.entity';
 import { Transaction } from './transaction.entity';
 
 @Entity({ tableName: 'accounts', customRepository: () => AccountRepository })
 export class Account extends Timestamp {
   [EntityRepositoryType]?: AccountRepository;
 
-  @PrimaryKey({
-    type: 'uuid',
-    defaultRaw: 'uuid_generate_v4()',
-    name: 'account_id',
-  })
+  @PrimaryKey({ type: 'text', unique: true, name: 'account_id' })
   id!: string;
 
-  @Unique({ name: 'accounts_user_id_index', properties: ['index', 'user'] })
+  @PrimaryKey({ type: 'text', name: 'wallet_id' })
+  walletId!: string;
+
+  [PrimaryKeyType]?: [string, string];
+
   @Property({ type: 'integer', name: 'index' })
   index!: number;
 
-  @Property({ type: 'text', unique: true, name: 'account_address' })
+  @Property({ type: 'char', length: 42, unique: true, name: 'account_address' })
   accountAddress!: string;
 
   @Property({
@@ -39,12 +39,18 @@ export class Account extends Timestamp {
   })
   balance!: string;
 
-  @ManyToOne(() => User, { fieldName: 'user_id' })
-  user!: User;
+  @ManyToOne(() => Wallet, { primary: true })
+  wallet!: Wallet;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)
   senderTxs!: Transaction[];
 
   @OneToMany(() => Transaction, (transaction) => transaction.recipient)
   recipientTxs!: Transaction[];
+
+  constructor(id: string, walletId: string) {
+    super();
+    this.id = id;
+    this.walletId = walletId;
+  }
 }

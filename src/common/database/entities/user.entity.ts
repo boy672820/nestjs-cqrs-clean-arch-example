@@ -1,6 +1,6 @@
-import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
-import { Account } from './account.entity';
+import { Wallet } from './wallet.entity';
 
 @Entity({ tableName: 'users' })
 export class User extends Timestamp {
@@ -9,14 +9,14 @@ export class User extends Timestamp {
     defaultRaw: 'uuid_generate_v4()',
     name: 'user_id',
   })
-  readonly id!: string;
+  id!: string;
 
   @Property({ type: 'text', unique: true, name: 'username' })
-  readonly username!: string;
+  username!: string;
 
   @Property({ type: 'text', hidden: true, name: 'password' })
-  readonly password!: string;
+  password!: string;
 
-  @OneToMany(() => Account, (account) => account.user)
-  readonly accounts!: Account[];
+  @OneToOne(() => Wallet)
+  wallet!: Wallet;
 }
