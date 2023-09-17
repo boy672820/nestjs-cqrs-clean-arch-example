@@ -1,16 +1,5 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 
-/**
- * Created Wallet
- *
- * @property phrase - The phrase of the wallet
- * @property address - The address of the wallet, which is the derived address from the phrase
- */
-export type CreatedWallet = {
-  phrase: string;
-  address: string;
-};
-
 export interface AccountProperties {
   id: string;
   userId: string;

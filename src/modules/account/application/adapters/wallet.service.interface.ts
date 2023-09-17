@@ -1,4 +1,4 @@
-import type { CreatedWallet } from '../../domain/account';
+import type { CreatedHDNode } from '../../domain/wallet';
 
 export interface IWalletService {
   /**
@@ -7,5 +7,5 @@ export interface IWalletService {
    * @param password - The password to encrypt the wallet
    * @returns The created wallet
    */
-  createWallet(password: string): CreatedWallet;
+  createHDNode(password: string): CreatedHDNode;
 }

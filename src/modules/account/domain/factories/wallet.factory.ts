@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
-import { Account, AccountProperties } from '../account';
+import { Wallet, WalletProperties } from '../wallet';
 
 @Injectable()
-export class AccountFactory {
+export class WalletFactory {
   constructor(private readonly eventPublisher: EventPublisher) {}
 
-  create(props: Omit<AccountProperties, 'createdAt'>): Account {
+  create(props: Omit<WalletProperties, 'createdAt'>): Wallet {
     return this.eventPublisher.mergeObjectContext(
-      new Account({ ...props, createdAt: new Date() }),
+      new Wallet({ ...props, createdAt: new Date() }),
     );
   }
 }

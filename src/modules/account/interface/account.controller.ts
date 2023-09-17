@@ -4,12 +4,14 @@ import {
   ApiBasicAuth,
   ApiCreatedResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { CreateWalletDto } from './dto';
 import { CreateWalletCommand } from '../application/commands/create-wallet.command';
 import type { UserPayload } from '@libs/auth';
 
+@ApiTags('Account')
 @Controller('account')
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}

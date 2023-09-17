@@ -1,18 +1,15 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateWalletCommand } from './create-wallet.command';
-import { AccountFactory } from '../../domain';
+import { WalletFactory } from '../../domain';
 import { InjectionToken } from '../../account.constants';
 import { ulid } from 'ulid';
 import type { IWalletService } from '../adapters/wallet.service.interface';
-import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
+import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
 
 type CreateWalletResult = {
   phrase: string;
-  id: string;
-  accountAddress: string;
-  balance: string;
-  createdAt: Date;
+  walletId: string;
 };
 
 @CommandHandler(CreateWalletCommand)
@@ -20,33 +17,29 @@ export class CreateWalletHandler
   implements ICommandHandler<CreateWalletCommand, CreateWalletResult>
 {
   constructor(
-    private readonly accountFactory: AccountFactory,
+    private readonly walletFactory: WalletFactory,
     @Inject(InjectionToken.WALLET_SERVICE)
     private readonly walletService: IWalletService,
     @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-    private readonly accountRepository: IAccountRepository,
+    private readonly walletRepository: IWalletRepository,
   ) {}
 
   async execute(command: CreateWalletCommand) {
     const { userId, password } = command;
     const id = ulid();
-    const wallet = this.walletService.createWallet(password);
-    const account = this.accountFactory.create({
+    const hdnode = this.walletService.createHDNode(password);
+    const wallet = this.walletFactory.create({
       id,
       userId,
-      index: 0,
-      accountAddress: wallet.address,
-      balance: '0',
+      address: hdnode.address,
+      publicKey: hdnode.publicKey,
     });
 
-    await this.accountRepository.save(account);
+    await this.walletRepository.save(wallet);
 
     return {
-      phrase: wallet.phrase,
-      id: account.id,
-      accountAddress: account.accountAddress,
-      balance: account.balance,
-      createdAt: account.createdAt,
+      phrase: hdnode.phrase,
+      walletId: wallet.id,
     };
   }
 }
