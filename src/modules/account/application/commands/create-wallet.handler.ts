@@ -11,7 +11,7 @@ type CreateWalletResult = {
   phrase: string;
   accountAddress: string;
   privkey: string;
-  balance: 0;
+  balance: number;
 };
 
 @CommandHandler(CreateWalletCommand)
