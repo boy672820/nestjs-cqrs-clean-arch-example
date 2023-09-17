@@ -3,12 +3,12 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account } from '@common/database/entities';
 import { AccountController } from './interface';
-import { WalletFactory } from './domain';
+import { AccountFactory, WalletFactory } from './domain';
 import { CreateWalletHandler } from './application';
 import { WalletRepository, WalletService } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
-const Factories = [WalletFactory];
+const Factories = [WalletFactory, AccountFactory];
 
 const CommandHandlers = [CreateWalletHandler];
 

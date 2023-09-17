@@ -29,16 +29,16 @@ export class AccountController {
           example:
             'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat',
         },
-        id: {
-          type: 'string',
-          format: 'ulid',
-          description: 'Account ID (ULID)',
-          example: '01h9z32d127prt1j3s77xwf5d4',
-        },
         accountAddress: {
           type: 'string',
           format: 'address',
           description: 'Account address',
+          example: '0x5FfC014343cd971B7eb70732021E26C35B744cc4',
+        },
+        privkey: {
+          type: 'string',
+          format: 'hex',
+          description: 'Account private key(hex)',
           example: '0x5FfC014343cd971B7eb70732021E26C35B744cc4',
         },
         balance: {
@@ -46,12 +46,6 @@ export class AccountController {
           format: 'uint256',
           description: 'Account balance',
           example: '100000000000000000000',
-        },
-        createdAt: {
-          type: 'string',
-          format: 'date-time',
-          description: 'Account creation date',
-          example: '2021-01-01T00:00:00.000Z',
         },
       },
     },

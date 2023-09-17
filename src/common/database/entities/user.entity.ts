@@ -1,6 +1,5 @@
-import { Entity, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
-import { Wallet } from './wallet.entity';
 
 @Entity({ tableName: 'users' })
 export class User extends Timestamp {
@@ -16,7 +15,4 @@ export class User extends Timestamp {
 
   @Property({ type: 'text', hidden: true, name: 'password' })
   password!: string;
-
-  @OneToOne(() => Wallet)
-  wallet!: Wallet;
 }

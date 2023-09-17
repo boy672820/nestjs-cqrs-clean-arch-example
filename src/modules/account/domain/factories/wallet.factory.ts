@@ -6,9 +6,7 @@ import { Wallet, WalletProperties } from '../wallet';
 export class WalletFactory {
   constructor(private readonly eventPublisher: EventPublisher) {}
 
-  create(props: Omit<WalletProperties, 'createdAt'>): Wallet {
-    return this.eventPublisher.mergeObjectContext(
-      new Wallet({ ...props, createdAt: new Date() }),
-    );
+  create(props: WalletProperties): Wallet {
+    return this.eventPublisher.mergeObjectContext(new Wallet(props));
   }
 }

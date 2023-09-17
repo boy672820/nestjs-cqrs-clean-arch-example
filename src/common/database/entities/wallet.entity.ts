@@ -1,22 +1,19 @@
-import { PickType } from '@nestjs/swagger';
 import {
+  Collection,
   Entity,
   OneToMany,
   PrimaryKey,
   PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
-import { Account, Timestamp } from '@common/database/entities';
+import { Account, CreatedAt } from '@common/database/entities';
 
 @Entity({ tableName: 'wallets' })
-export class Wallet extends PickType(Timestamp, ['createdAt'] as const) {
-  @PrimaryKey({ type: 'text', unique: true, name: 'wallet_id' })
-  id!: string;
-
+export class Wallet extends CreatedAt {
   @PrimaryKey({ type: 'text', unique: true, name: 'user_id' })
   userId!: string;
 
-  [PrimaryKeyType]?: [string, string];
+  [PrimaryKeyType]!: string;
 
   @Property({ type: 'char', length: 42, name: 'address' })
   address!: string;
@@ -25,11 +22,10 @@ export class Wallet extends PickType(Timestamp, ['createdAt'] as const) {
   publicKey!: string;
 
   @OneToMany(() => Account, (account) => account.wallet)
-  accounts!: Account[];
+  accounts: Collection<Account> = new Collection<Account>(this);
 
-  constructor(id: string, userId: string) {
+  constructor(userId: string) {
     super();
-    this.id = id;
     this.userId = userId;
   }
 }

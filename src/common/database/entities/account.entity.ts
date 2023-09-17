@@ -1,10 +1,10 @@
 import {
+  Collection,
   Entity,
   EntityRepositoryType,
   ManyToOne,
   OneToMany,
   PrimaryKey,
-  PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
@@ -18,11 +18,6 @@ export class Account extends Timestamp {
 
   @PrimaryKey({ type: 'text', unique: true, name: 'account_id' })
   id!: string;
-
-  @PrimaryKey({ type: 'text', name: 'wallet_id' })
-  walletId!: string;
-
-  [PrimaryKeyType]?: [string, string];
 
   @Property({ type: 'integer', name: 'index' })
   index!: number;
@@ -39,18 +34,12 @@ export class Account extends Timestamp {
   })
   balance!: string;
 
-  @ManyToOne(() => Wallet, { primary: true })
+  @ManyToOne(() => Wallet, { fieldName: 'user_id' })
   wallet!: Wallet;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)
-  senderTxs!: Transaction[];
+  senderTxs: Collection<Transaction> = new Collection<Transaction>(this);
 
   @OneToMany(() => Transaction, (transaction) => transaction.recipient)
-  recipientTxs!: Transaction[];
-
-  constructor(id: string, walletId: string) {
-    super();
-    this.id = id;
-    this.walletId = walletId;
-  }
+  recipientTxs: Collection<Transaction> = new Collection<Transaction>(this);
 }

@@ -1,10 +1,9 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { PickType } from '@nestjs/swagger';
-import { Timestamp } from '@common/database/entities';
+import { CreatedAt } from '@common/database/entities';
 import { Account } from './account.entity';
 
 @Entity({ tableName: 'transactions' })
-export class Transaction extends PickType(Timestamp, ['createdAt'] as const) {
+export class Transaction extends CreatedAt {
   @PrimaryKey({
     type: 'uuid',
     defaultRaw: 'uuid_generate_v4()',
