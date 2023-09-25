@@ -1,4 +1,3 @@
 export enum InjectionToken {
-  WALLET_SERVICE = 'WALLET_SERVICE',
   ACCOUNT_REPOSITORY = 'ACCOUNT_REPOSITORY',
 }

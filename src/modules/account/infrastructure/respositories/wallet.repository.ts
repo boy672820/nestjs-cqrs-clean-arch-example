@@ -5,7 +5,6 @@ import {
   Wallet as WalletEntity,
 } from '@common/database/entities';
 import { Wallet } from '../../domain/wallet';
-import { Account } from '../../domain/account';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
 
 @Injectable()
@@ -14,12 +13,10 @@ export class WalletRepository implements IWalletRepository {
 
   async save(wallet: Wallet): Promise<void> {
     const entity = this.entityManager.create(WalletEntity, wallet);
-    await this.entityManager.persistAndFlush(entity);
-  }
+    wallet.accounts.forEach((account) => {
+      entity.accounts.add(this.entityManager.create(AccountEntity, account));
+    });
 
-  async addAccount(wallet: Wallet, account: Account): Promise<void> {
-    const entity = this.entityManager.getReference(WalletEntity, wallet.userId);
-    entity.accounts.add(this.entityManager.create(AccountEntity, account));
     await this.entityManager.persistAndFlush(entity);
   }
 }

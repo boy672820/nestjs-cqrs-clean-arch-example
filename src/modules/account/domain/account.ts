@@ -1,8 +1,3 @@
-export type DerivedChild = {
-  address: string;
-  privkey: string;
-};
-
 export interface AccountProperties {
   id: string;
   index: number;
