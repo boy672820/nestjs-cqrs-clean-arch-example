@@ -1,25 +1,14 @@
-import { Module, OnModuleInit, Type } from '@nestjs/common';
+import { Module, Type } from '@nestjs/common';
 import { DatabaseConfigModule, DatabaseConfigService } from '@config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { EntityManager } from '@mikro-orm/postgresql';
+import { DatabaseHealthIndicator } from './database.health-indicator';
 
 type DatabaseModuleFeatureOptions = {
   entities: Type<any>[];
 };
 
 @Module({})
-export class DatabaseModule implements OnModuleInit {
-  constructor(private readonly em: EntityManager) {}
-
-  async onModuleInit() {
-    try {
-      await this.em.execute('SELECT 1 + 1');
-    } catch (e) {
-      console.error('Database connection failed');
-      process.exit(1);
-    }
-  }
-
+export class DatabaseModule {
   static forRoot() {
     return {
       module: DatabaseModule,
@@ -42,6 +31,7 @@ export class DatabaseModule implements OnModuleInit {
           inject: [DatabaseConfigService],
         }),
       ],
+      providers: [DatabaseHealthIndicator],
     };
   }
 

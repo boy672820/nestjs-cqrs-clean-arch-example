@@ -1,28 +1,26 @@
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler } from '@nestjs/cqrs';
 import { AlreadyExistsWalletException } from '@common/errors';
 import { UniqueConstraintViolationException } from '@mikro-orm/core';
+import { CommandHandlerAbstract } from '@common/abstracts';
 import { CreateWalletCommand } from './create-wallet.command';
+import { CreateWalletCommandResult } from './create-wallet.command-result';
 import { WalletFactory } from '../../domain';
 import { InjectionToken } from '../../account.constants';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
 
-type CreateWalletResult = {
-  phrase: string;
-  accountAddress: string;
-  privkey: string;
-  balance: string;
-};
-
 @CommandHandler(CreateWalletCommand)
-export class CreateWalletHandler
-  implements ICommandHandler<CreateWalletCommand, CreateWalletResult>
-{
+export class CreateWalletHandler extends CommandHandlerAbstract<
+  CreateWalletCommand,
+  CreateWalletCommandResult
+> {
   constructor(
     private readonly walletFactory: WalletFactory,
     @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly walletRepository: IWalletRepository,
-  ) {}
+  ) {
+    super();
+  }
 
   async execute(command: CreateWalletCommand) {
     const { userId, password } = command;
@@ -32,12 +30,12 @@ export class CreateWalletHandler
     try {
       await this.walletRepository.save(wallet);
 
-      return {
+      return new CreateWalletCommandResult(true, 'Wallet created', {
         phrase: wallet.phrase,
         accountAddress: account.accountAddress,
         privkey: account.privkey,
         balance: account.balance,
-      };
+      });
     } catch (e) {
       if (e instanceof UniqueConstraintViolationException) {
         throw new AlreadyExistsWalletException();

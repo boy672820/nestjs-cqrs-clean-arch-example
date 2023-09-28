@@ -8,11 +8,12 @@ import {
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { CreateWalletDto } from './dto';
-import { ApiAccountCreatedResponse } from './decorators';
+import { ApiWalletCreatedResponse } from './decorators';
 import { CreateWalletCommand } from '../application/commands/create-wallet.command';
 import type { UserPayload } from '@libs/auth';
 
 @ApiTags('Account')
+@ApiBasicAuth()
 @Controller('account')
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}
@@ -21,8 +22,7 @@ export class AccountController {
     summary: 'Create wallet',
     description: 'Before creating an account, you must create a wallet',
   })
-  @ApiBasicAuth()
-  @ApiAccountCreatedResponse()
+  @ApiWalletCreatedResponse()
   @ApiConflictResponse({ description: 'Account already exists' })
   @Post()
   createWallet(@User() user: UserPayload, @Body() dto: CreateWalletDto) {
@@ -35,7 +35,6 @@ export class AccountController {
     summary: 'Add account',
     description: 'Create a new account in their own wallet',
   })
-  @ApiBasicAuth()
   @Put()
   addAccount(@User() user: UserPayload, @Body() dto: CreateWalletDto) {}
 }
