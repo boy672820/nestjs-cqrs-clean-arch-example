@@ -1,13 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBasicAuth,
-  ApiCreatedResponse,
+  ApiConflictResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { CreateWalletDto } from './dto';
+import { ApiAccountCreatedResponse } from './decorators';
 import { CreateWalletCommand } from '../application/commands/create-wallet.command';
 import type { UserPayload } from '@libs/auth';
 
@@ -16,44 +17,25 @@ import type { UserPayload } from '@libs/auth';
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}
 
-  @ApiOperation({ summary: 'Create account' })
-  @ApiBasicAuth()
-  @ApiCreatedResponse({
-    description: 'Account created',
-    schema: {
-      type: 'object',
-      properties: {
-        phrase: {
-          type: 'string',
-          description: 'Wallet phrase',
-          example:
-            'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat',
-        },
-        accountAddress: {
-          type: 'string',
-          format: 'address',
-          description: 'Account address',
-          example: '0x5FfC014343cd971B7eb70732021E26C35B744cc4',
-        },
-        privkey: {
-          type: 'string',
-          format: 'hex',
-          description: 'Account private key(hex)',
-          example: '0x5FfC014343cd971B7eb70732021E26C35B744cc4',
-        },
-        balance: {
-          type: 'string',
-          format: 'uint256',
-          description: 'Account balance',
-          example: '100000000000000000000',
-        },
-      },
-    },
+  @ApiOperation({
+    summary: 'Create wallet',
+    description: 'Before creating an account, you must create a wallet',
   })
+  @ApiBasicAuth()
+  @ApiAccountCreatedResponse()
+  @ApiConflictResponse({ description: 'Account already exists' })
   @Post()
   createWallet(@User() user: UserPayload, @Body() dto: CreateWalletDto) {
     return this.commandBus.execute(
       new CreateWalletCommand(user.id, dto.password),
     );
   }
+
+  @ApiOperation({
+    summary: 'Add account',
+    description: 'Create a new account in their own wallet',
+  })
+  @ApiBasicAuth()
+  @Put()
+  addAccount(@User() user: UserPayload, @Body() dto: CreateWalletDto) {}
 }
