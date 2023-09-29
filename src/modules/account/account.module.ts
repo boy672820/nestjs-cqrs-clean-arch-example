@@ -4,13 +4,13 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account } from '@common/database/entities';
 import { AccountController } from './interface';
 import { WalletFactory } from './domain';
-import { AddAccountHandler, CreateWalletHandler } from './application';
+import { CreateAccountHandler, CreateWalletHandler } from './application';
 import { WalletRepository } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
 const Factories = [WalletFactory];
 
-const CommandHandlers = [CreateWalletHandler, AddAccountHandler];
+const CommandHandlers = [CreateWalletHandler, CreateAccountHandler];
 
 const Repositories = [
   {

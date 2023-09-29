@@ -4,12 +4,14 @@ import {
   ApiBasicAuth,
   ApiConflictResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { CreateWalletDto } from './dto';
 import { ApiWalletCreatedResponse } from './decorators';
 import { CreateWalletCommand } from '../application/commands/create-wallet.command';
+import { CreateAccountCommand } from '../application/commands/create-account.command';
 import type { UserPayload } from '@libs/auth';
 
 @ApiTags('Account')
@@ -36,5 +38,7 @@ export class AccountController {
     description: 'Create a new account in their own wallet',
   })
   @Put()
-  addAccount(@User() user: UserPayload, @Body() dto: CreateWalletDto) {}
+  createAccount(@User() user: UserPayload) {
+    return this.commandBus.execute(new CreateAccountCommand(user.id));
+  }
 }

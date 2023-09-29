@@ -1,13 +1,9 @@
-import { ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiCommandResponse } from '@common/swagger/decorators';
+import { HttpStatus } from '@nestjs/common';
 
 export function ApiAccountCreatedResponse() {
-  return ApiCreatedResponse({
-    description: 'Account created',
-    schema: {
-      type: 'object',
-      properties: {
-        accountAddress: {},
-      },
-    },
+  return ApiCommandResponse({
+    description: 'Account successfully created',
+    status: HttpStatus.CREATED,
   });
 }

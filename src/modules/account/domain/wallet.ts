@@ -30,6 +30,12 @@ export class Wallet extends AggregateRoot implements WalletProperties {
     this.address = this.hdnode.address;
   }
 
+  /**
+   * Add account
+   *
+   * @param index - Account index
+   * @returns
+   */
   addAccount(index: number): AccountProperties & { privkey: string } {
     const child = this.hdnode.deriveChild(index);
     const props = {

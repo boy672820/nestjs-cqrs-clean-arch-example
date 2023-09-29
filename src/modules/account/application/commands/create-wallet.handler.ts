@@ -4,7 +4,10 @@ import { AlreadyExistsWalletException } from '@common/errors';
 import { UniqueConstraintViolationException } from '@mikro-orm/core';
 import { CommandHandlerAbstract } from '@common/abstracts';
 import { CreateWalletCommand } from './create-wallet.command';
-import { CreateWalletCommandResult } from './create-wallet.command-result';
+import {
+  CreateWalletCommandResult,
+  CreateWalletResultDto,
+} from './create-wallet.command-result';
 import { WalletFactory } from '../../domain';
 import { InjectionToken } from '../../account.constants';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
@@ -30,12 +33,14 @@ export class CreateWalletHandler extends CommandHandlerAbstract<
     try {
       await this.walletRepository.save(wallet);
 
-      return new CreateWalletCommandResult(true, 'Wallet created', {
+      const dto = new CreateWalletResultDto({
         phrase: wallet.phrase,
         accountAddress: account.accountAddress,
         privkey: account.privkey,
         balance: account.balance,
       });
+
+      return new CreateWalletCommandResult(true, 'Wallet created', dto);
     } catch (e) {
       if (e instanceof UniqueConstraintViolationException) {
         throw new AlreadyExistsWalletException();
