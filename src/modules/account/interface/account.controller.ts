@@ -3,15 +3,16 @@ import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBasicAuth,
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { CreateWalletDto } from './dto';
-import { ApiWalletCreatedResponse } from './decorators';
 import { CreateWalletCommand } from '../application/commands/create-wallet.command';
 import { CreateAccountCommand } from '../application/commands/create-account.command';
+import { CreateWalletCommandResult } from '../application/commands/create-wallet.command-result';
+import { CreateAccountCommandResult } from '../application/commands/create-account.command-result';
 import type { UserPayload } from '@libs/auth';
 
 @ApiTags('Account')
@@ -24,7 +25,10 @@ export class AccountController {
     summary: 'Create wallet',
     description: 'Before creating an account, you must create a wallet',
   })
-  @ApiWalletCreatedResponse()
+  @ApiCreatedResponse({
+    description: 'Wallet created',
+    type: CreateWalletCommandResult,
+  })
   @ApiConflictResponse({ description: 'Account already exists' })
   @Post()
   createWallet(@User() user: UserPayload, @Body() dto: CreateWalletDto) {
@@ -36,6 +40,10 @@ export class AccountController {
   @ApiOperation({
     summary: 'Add account',
     description: 'Create a new account in their own wallet',
+  })
+  @ApiCreatedResponse({
+    description: 'Account created',
+    type: CreateAccountCommandResult,
   })
   @Put()
   createAccount(@User() user: UserPayload) {

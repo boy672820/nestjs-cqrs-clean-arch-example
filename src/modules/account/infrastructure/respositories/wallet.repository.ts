@@ -19,4 +19,16 @@ export class WalletRepository implements IWalletRepository {
 
     await this.entityManager.persistAndFlush(entity);
   }
+
+  async findByUserId(userId: string): Promise<Wallet | null> {
+    const entity = await this.entityManager.findOne(
+      WalletEntity,
+      { userId },
+      { populate: ['accounts'] },
+    );
+
+    if (!entity) {
+      return null;
+    }
+  }
 }

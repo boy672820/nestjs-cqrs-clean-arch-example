@@ -53,4 +53,10 @@ export class CreateWalletResultDto implements CreateWalletResult {
 
 export class CreateWalletCommandResult<
   T extends CreateWalletResult = CreateWalletResult,
-> extends CommandResultAbstract<T> {}
+> extends CommandResultAbstract<T> {
+  @ApiProperty({
+    type: CreateWalletResultDto,
+    description: 'Wallet created',
+  })
+  readonly data: T;
+}

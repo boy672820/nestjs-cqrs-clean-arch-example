@@ -1,4 +1,4 @@
-import { OmitType } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { CommandResultAbstract } from '@common/abstracts';
 import {
   CreateWalletResult,
@@ -19,4 +19,7 @@ export class CreateAccountResultDto
 
 export class CreateAccountCommandResult<
   T extends CreateAccountResult = CreateAccountResult,
-> extends CommandResultAbstract<T> {}
+> extends CommandResultAbstract<T> {
+  @ApiProperty({ type: CreateAccountResultDto, description: 'Account created' })
+  readonly data: T;
+}
