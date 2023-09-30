@@ -7,7 +7,7 @@ import { CreateWalletCommand } from './create-wallet.command';
 import {
   CreateWalletCommandResult,
   CreateWalletResultDto,
-} from './create-wallet.command-result';
+} from './create-wallet.result';
 import { WalletFactory } from '../../domain';
 import { InjectionToken } from '../../account.constants';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';

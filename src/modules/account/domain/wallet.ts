@@ -5,28 +5,8 @@ import { ulid } from 'ulid';
 
 export interface WalletProperties {
   userId: string;
-  password?: string;
-}
-
-/**
- * HDNodeWallet을 생성했는지 검사하는 메서드 데코레이터
- */
-function CheckWalletInitizlied() {
-  return function (
-    _target: Wallet,
-    _propertyKey: string,
-    descriptor: PropertyDescriptor,
-  ) {
-    const originalMethod = descriptor.value;
-
-    descriptor.value = function (...args: any[]) {
-      if (this.hdnode === undefined) {
-        throw new Error('Wallet is not initialized');
-      }
-
-      return originalMethod.apply(this, args);
-    };
-  };
+  password: string;
+  phrase?: string;
 }
 
 export class Wallet extends AggregateRoot implements WalletProperties {
@@ -36,21 +16,26 @@ export class Wallet extends AggregateRoot implements WalletProperties {
   public address: string;
   public accounts: Account[] = [];
 
+  private _phrase?: string;
   private hdnode: HDNodeWallet;
 
   get phrase(): string {
-    return this.hdnode.mnemonic.phrase;
+    return this._phrase ?? this.hdnode.mnemonic.phrase;
   }
 
   constructor(props: WalletProperties) {
     super();
     Object.assign(this, props);
 
-    if (props.password) {
+    if (props?.phrase) {
+      this._phrase = props.phrase;
+      this.hdnode = HDNodeWallet.fromPhrase(props.phrase, props.password);
+    } else {
       this.hdnode = HDNodeWallet.createRandom(this.password);
-      this.publicKey = this.hdnode.publicKey;
-      this.address = this.hdnode.address;
     }
+
+    this.publicKey = this.hdnode.publicKey;
+    this.address = this.hdnode.address;
   }
 
   /**
@@ -59,7 +44,6 @@ export class Wallet extends AggregateRoot implements WalletProperties {
    * @param index - Account index
    * @returns
    */
-  @CheckWalletInitizlied()
   addAccount(index: number): AccountProperties & { privkey: string } {
     const child = this.hdnode.deriveChild(index);
     const props = {
