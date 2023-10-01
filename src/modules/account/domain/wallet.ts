@@ -5,46 +5,90 @@ import { ulid } from 'ulid';
 
 export interface WalletProperties {
   userId: string;
-  password: string;
-  phrase?: string;
+  publicKey: string;
+  address: string;
+  accounts: Account[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface CreateWalletProperties
+  extends Pick<WalletProperties, 'userId'> {}
+
+export interface ReconstituteWalletProperties extends CreateWalletProperties {
+  accounts: AccountProperties[];
+}
+
+/**
+ * Check HDNodeWallet method decorator
+ */
+function CheckHDNode() {
+  return function (
+    _target: Wallet,
+    _propertyKey: string,
+    descriptor: PropertyDescriptor,
+  ) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = function (...args: any[]) {
+      if (!this.hdnode) {
+        throw new Error('HDNode not initialized');
+      }
+
+      return originalMethod.apply(this, args);
+    };
+
+    return descriptor;
+  };
 }
 
 export class Wallet extends AggregateRoot implements WalletProperties {
   public userId: string;
-  public password: string;
   public publicKey: string;
   public address: string;
   public accounts: Account[] = [];
 
-  private _phrase?: string;
   private hdnode: HDNodeWallet;
 
-  get phrase(): string {
-    return this._phrase ?? this.hdnode.mnemonic.phrase;
-  }
-
-  constructor(props: WalletProperties) {
+  constructor(props: CreateWalletProperties) {
     super();
     Object.assign(this, props);
-
-    if (props?.phrase) {
-      this._phrase = props.phrase;
-      this.hdnode = HDNodeWallet.fromPhrase(props.phrase, props.password);
-    } else {
-      this.hdnode = HDNodeWallet.createRandom(this.password);
-    }
-
-    this.publicKey = this.hdnode.publicKey;
-    this.address = this.hdnode.address;
   }
 
   /**
-   * Add account
+   * Create random HDNode
    *
-   * @param index - Account index
-   * @returns
+   * @param password - Password
+   * @returns Mnemonic phrase
    */
-  addAccount(index: number): AccountProperties & { privkey: string } {
+  createHDNode(password: string): string {
+    if (this.hdnode) {
+      throw new Error('HDNode already initialized');
+    }
+
+    const hdnode = HDNodeWallet.createRandom(password);
+    this.hdnode = hdnode;
+    this.publicKey = hdnode.publicKey;
+    this.address = hdnode.address;
+
+    return hdnode.mnemonic.phrase;
+  }
+
+  /**
+   * Initialize HDNode
+   *
+   * @param phrase - Mnemonic phrase
+   * @param password - Password
+   */
+  initialize(phrase: string, password: string): void {
+    const hdnode = HDNodeWallet.fromPhrase(phrase, password);
+    this.hdnode = hdnode;
+    this.publicKey = hdnode.publicKey;
+    this.address = hdnode.address;
+  }
+
+  @CheckHDNode()
+  addAccount(): AccountProperties & { privkey: string } {
+    const index = this.accounts.length;
     const child = this.hdnode.deriveChild(index);
     const props = {
       id: ulid(),

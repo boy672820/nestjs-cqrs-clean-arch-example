@@ -19,7 +19,7 @@ export class CreateWalletHandler extends CommandHandlerAbstract<
 > {
   constructor(
     private readonly walletFactory: WalletFactory,
-    @Inject(InjectionToken.ACCOUNT_REPOSITORY)
+    @Inject(InjectionToken.WALLET_REPOSITORY)
     private readonly walletRepository: IWalletRepository,
   ) {
     super();
@@ -27,14 +27,15 @@ export class CreateWalletHandler extends CommandHandlerAbstract<
 
   async execute(command: CreateWalletCommand) {
     const { userId, password } = command;
-    const wallet = this.walletFactory.create({ userId, password });
-    const account = wallet.addAccount(0);
+    const wallet = this.walletFactory.create({ userId });
+    const phrase = wallet.createHDNode(password);
+    const account = wallet.addAccount();
 
     try {
       await this.walletRepository.save(wallet);
 
       const dto = new CreateWalletResultDto({
-        phrase: wallet.phrase,
+        phrase,
         accountAddress: account.accountAddress,
         privkey: account.privkey,
         balance: account.balance,

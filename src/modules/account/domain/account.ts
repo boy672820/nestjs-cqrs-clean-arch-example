@@ -1,3 +1,5 @@
+import { AggregateRoot } from '@nestjs/cqrs';
+
 export interface AccountProperties {
   id: string;
   index: number;
@@ -5,13 +7,14 @@ export interface AccountProperties {
   balance: string;
 }
 
-export class Account implements AccountProperties {
+export class Account extends AggregateRoot implements AccountProperties {
   public id: string;
   public index: number;
   public accountAddress: string;
   public balance: string;
 
   constructor(props: AccountProperties) {
+    super();
     Object.assign(this, props);
   }
 }

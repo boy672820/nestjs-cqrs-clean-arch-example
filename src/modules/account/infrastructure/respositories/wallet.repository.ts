@@ -6,10 +6,14 @@ import {
 } from '@common/database/entities';
 import { Wallet } from '../../domain/wallet';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
+import { WalletFactory } from '../../domain';
 
 @Injectable()
 export class WalletRepository implements IWalletRepository {
-  constructor(private readonly entityManager: EntityManager) {}
+  constructor(
+    private readonly entityManager: EntityManager,
+    private readonly walletFactory: WalletFactory,
+  ) {}
 
   async save(wallet: Wallet): Promise<void> {
     const entity = this.entityManager.create(WalletEntity, wallet);
@@ -30,5 +34,15 @@ export class WalletRepository implements IWalletRepository {
     if (!entity) {
       return null;
     }
+
+    return this.walletFactory.reconstitute({
+      userId,
+      accounts: entity.accounts.getItems().map((account) => ({
+        id: account.id,
+        index: account.index,
+        accountAddress: account.accountAddress,
+        balance: account.balance,
+      })),
+    });
   }
 }

@@ -14,7 +14,7 @@ const CommandHandlers = [CreateWalletHandler, AddAccountUnsafeHandler];
 
 const Repositories = [
   {
-    provide: InjectionToken.ACCOUNT_REPOSITORY,
+    provide: InjectionToken.WALLET_REPOSITORY,
     useClass: WalletRepository,
   },
 ];

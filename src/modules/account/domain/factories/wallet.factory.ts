@@ -1,12 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
-import { Wallet, WalletProperties } from '../wallet';
+import {
+  Wallet,
+  type ReconstituteWalletProperties,
+  type CreateWalletProperties,
+} from '../wallet';
+import { Account } from '../account';
 
 @Injectable()
 export class WalletFactory {
   constructor(private readonly eventPublisher: EventPublisher) {}
 
-  create(props: WalletProperties): Wallet {
+  /**
+   * Create wallet
+   *
+   * @param props - Wallet properties
+   * @returns Wallet
+   */
+  create(props: CreateWalletProperties): Wallet {
     return this.eventPublisher.mergeObjectContext(new Wallet(props));
+  }
+
+  /**
+   * Reconstitute wallet
+   *
+   * @param props - Wallet properties
+   * @returns Wallet
+   */
+  reconstitute(props: ReconstituteWalletProperties): Wallet {
+    const wallet = this.eventPublisher.mergeObjectContext(new Wallet(props));
+    wallet.accounts = props.accounts.map((account) =>
+      this.eventPublisher.mergeObjectContext(new Account(account)),
+    );
+
+    return wallet;
   }
 }
