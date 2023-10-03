@@ -4,21 +4,14 @@ import { Expose } from 'class-transformer';
 
 export interface CreateWalletResult {
   phrase: string;
-  accountAddress: string;
-  privkey: string;
-  balance: string;
+  account: {
+    address: string;
+    privkey: string;
+    balance: string;
+  };
 }
 
-export class CreateWalletResultDto implements CreateWalletResult {
-  @ApiProperty({
-    type: 'string',
-    description: 'Wallet phrase',
-    example:
-      'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat',
-  })
-  @Expose()
-  readonly phrase: string;
-
+export class AccountDto {
   @ApiProperty({
     type: 'string',
     format: 'address',
@@ -26,7 +19,7 @@ export class CreateWalletResultDto implements CreateWalletResult {
     example: '0x5FfC014343cd971B7eb70732021E26C35B744cc4',
   })
   @Expose()
-  readonly accountAddress: string;
+  readonly address: string;
 
   @ApiProperty({
     type: 'string',
@@ -45,6 +38,24 @@ export class CreateWalletResultDto implements CreateWalletResult {
   })
   @Expose()
   readonly balance: string;
+}
+
+export class CreateWalletResultDto implements CreateWalletResult {
+  @ApiProperty({
+    type: 'string',
+    description: 'Wallet phrase',
+    example:
+      'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat',
+  })
+  @Expose()
+  readonly phrase: string;
+
+  @ApiProperty({
+    description: 'Account',
+    type: AccountDto,
+  })
+  @Expose()
+  readonly account: AccountDto;
 
   constructor(props: CreateWalletResult) {
     Object.assign(this, props);

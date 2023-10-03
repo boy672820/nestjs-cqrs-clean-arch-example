@@ -1,5 +1,6 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { Account, AccountProperties } from './account';
+import { WalletCreatedEvent } from './events/wallet-created.event';
 import { HDNodeWallet } from 'ethers';
 import { ulid } from 'ulid';
 
@@ -70,6 +71,8 @@ export class Wallet extends AggregateRoot implements WalletProperties {
     this.publicKey = hdnode.publicKey;
     this.address = hdnode.address;
 
+    this.apply(new WalletCreatedEvent(this.userId));
+
     return hdnode.mnemonic.phrase;
   }
 
@@ -86,6 +89,11 @@ export class Wallet extends AggregateRoot implements WalletProperties {
     this.address = hdnode.address;
   }
 
+  /**
+   * Add account
+   *
+   * @returns Account properties with private key
+   */
   @CheckHDNode()
   addAccount(): AccountProperties & { privkey: string } {
     const index = this.accounts.length;

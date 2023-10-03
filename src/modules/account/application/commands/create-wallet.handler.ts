@@ -36,9 +36,11 @@ export class CreateWalletHandler extends CommandHandlerAbstract<
 
       const dto = new CreateWalletResultDto({
         phrase,
-        accountAddress: account.accountAddress,
-        privkey: account.privkey,
-        balance: account.balance,
+        account: {
+          address: account.accountAddress,
+          privkey: account.privkey,
+          balance: account.balance,
+        },
       });
 
       return new CreateWalletCommandResult(true, 'Wallet created', dto);

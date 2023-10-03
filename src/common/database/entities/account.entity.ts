@@ -34,6 +34,21 @@ export class Account extends Timestamp {
   })
   balance!: string;
 
+  @Property({
+    type: 'boolean',
+    default: false,
+    name: 'is_locked',
+  })
+  isLocked = false;
+
+  @Property({
+    type: 'timestamp with time zone',
+    name: 'locked_at',
+    nullable: true,
+    default: null,
+  })
+  lockedAt: Date | null = null;
+
   @ManyToOne(() => Wallet, { fieldName: 'user_id' })
   wallet!: Wallet;
 

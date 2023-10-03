@@ -85,7 +85,14 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@app/auth(|/.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@common$": "<rootDir>/src/common",
+      "^@common/(.*)$": "<rootDir>/src/common/$1",
+      "^@config$": "<rootDir>/src/config",
+      "^@config/(.*)$": "<rootDir>/src/config/$1",
+      "^@core$": "<rootDir>/src/core",
+      "^@core/(.*)$": "<rootDir>/src/core/$1",
+      "^@libs/auth$": "<rootDir>/libs/auth/src",
+      "^@libs/auth/(.*)$": "<rootDir>/libs/auth/src/$1"
     }
   },
   "mikro-orm": {
