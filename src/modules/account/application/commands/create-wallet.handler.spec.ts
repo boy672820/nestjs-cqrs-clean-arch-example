@@ -1,5 +1,4 @@
 import { WalletFactory } from '../../domain';
-import { Wallet } from '../../domain/wallet';
 import { WalletRepository } from '../../infrastructure';
 import { CreateWalletCommand } from './create-wallet.command';
 import { CreateWalletHandler } from './create-wallet.handler';
