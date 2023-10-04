@@ -24,7 +24,7 @@ describe('AddAccountUnsafeHandler', () => {
   beforeEach(() => {
     walletRepository = {
       findByUserId: jest.fn().mockImplementation(() => wallet),
-      save: jest.fn(),
+      addAccount: jest.fn(),
     } as any;
     addAccountUnsafeHandler = new AddAccountUnsafeHandler(walletRepository);
   });
@@ -41,8 +41,8 @@ describe('AddAccountUnsafeHandler', () => {
     expect(wallet.initialize).toHaveBeenCalledWith(phrase, password);
     expect(wallet.addAccount).toHaveBeenCalled();
 
-    expect(walletRepository.save).toHaveBeenCalled();
-    expect(walletRepository.save).toHaveBeenCalledWith(wallet);
+    expect(walletRepository.addAccount).toHaveBeenCalled();
+    expect(walletRepository.addAccount).toHaveBeenCalledWith(wallet);
   });
 
   it('should throw an error if wallet not found', async () => {

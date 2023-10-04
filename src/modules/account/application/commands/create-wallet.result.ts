@@ -2,9 +2,10 @@ import { CommandResultAbstract } from '@common/abstracts';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export interface CreateWalletResult {
+export interface ICreateWalletResult {
   phrase: string;
   account: {
+    id: string;
     address: string;
     privkey: string;
     balance: string;
@@ -12,6 +13,14 @@ export interface CreateWalletResult {
 }
 
 export class AccountDto {
+  @ApiProperty({
+    type: 'string',
+    description: 'Account id',
+    example: '01HBTTAG5C1PDRS1K1HXRHKW1N',
+  })
+  @Expose()
+  readonly id: string;
+
   @ApiProperty({
     type: 'string',
     format: 'address',
@@ -40,7 +49,7 @@ export class AccountDto {
   readonly balance: string;
 }
 
-export class CreateWalletResultDto implements CreateWalletResult {
+export class CreateWalletResultDto implements ICreateWalletResult {
   @ApiProperty({
     type: 'string',
     description: 'Wallet phrase',
@@ -57,13 +66,13 @@ export class CreateWalletResultDto implements CreateWalletResult {
   @Expose()
   readonly account: AccountDto;
 
-  constructor(props: CreateWalletResult) {
+  constructor(props: ICreateWalletResult) {
     Object.assign(this, props);
   }
 }
 
 export class CreateWalletCommandResult<
-  T extends CreateWalletResult = CreateWalletResult,
+  T extends ICreateWalletResult = ICreateWalletResult,
 > extends CommandResultAbstract<T> {
   @ApiProperty({
     type: CreateWalletResultDto,

@@ -22,7 +22,7 @@ describe('CreateWalletHandler', () => {
 
   beforeEach(() => {
     walletRepository = {
-      save: jest.fn(),
+      create: jest.fn(),
     } as any;
     walletFactory = {
       create: jest.fn(() => wallet),
@@ -45,7 +45,7 @@ describe('CreateWalletHandler', () => {
     expect(wallet.createHDNode).toHaveBeenCalledWith(password);
     expect(wallet.addAccount).toHaveBeenCalled();
 
-    expect(walletRepository.save).toHaveBeenCalled();
-    expect(walletRepository.save).toHaveBeenCalledWith(wallet);
+    expect(walletRepository.create).toHaveBeenCalled();
+    expect(walletRepository.create).toHaveBeenCalledWith(wallet);
   });
 });

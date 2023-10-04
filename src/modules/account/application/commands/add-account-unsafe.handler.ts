@@ -34,10 +34,11 @@ export class AddAccountUnsafeHandler extends CommandHandlerAbstract<
 
     const account = wallet.addAccount();
 
-    await this.walletRepository.save(wallet);
+    await this.walletRepository.addAccount(wallet);
 
     return new AddAccountUnsafeCommandResult(true, 'Account added', {
       account: {
+        id: account.id,
         address: account.accountAddress,
         privkey: account.privkey,
         balance: '0',

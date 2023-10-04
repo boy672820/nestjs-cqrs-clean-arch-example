@@ -4,6 +4,7 @@ import {
   ApiBasicAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -46,6 +47,7 @@ export class WalletController {
     description: 'Account added',
     type: AddAccountUnsafeCommandResult,
   })
+  @ApiNotFoundResponse({ description: 'Wallet not found' })
   @Post('accounts/unsafe')
   addAccountUnsafe(
     @User() user: UserPayload,

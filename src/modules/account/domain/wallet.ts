@@ -98,11 +98,13 @@ export class Wallet extends AggregateRoot implements WalletProperties {
   addAccount(): AccountProperties & { privkey: string } {
     const index = this.accounts.length;
     const child = this.hdnode.deriveChild(index);
-    const props = {
+    const props: AccountProperties = {
       id: ulid(),
+      userId: this.userId,
       index,
       accountAddress: child.address,
       balance: '0',
+      isLocked: false,
     };
     this.accounts.push(new Account(props));
 

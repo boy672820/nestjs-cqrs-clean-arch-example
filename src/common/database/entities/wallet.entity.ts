@@ -10,10 +10,10 @@ import { Account, CreatedAt } from '@common/database/entities';
 
 @Entity({ tableName: 'wallets' })
 export class Wallet extends CreatedAt {
+  [PrimaryKeyType]!: string;
+
   @PrimaryKey({ type: 'text', unique: true, name: 'user_id' })
   userId!: string;
-
-  [PrimaryKeyType]!: string;
 
   @Property({ type: 'char', length: 42, name: 'address' })
   address!: string;
@@ -23,9 +23,4 @@ export class Wallet extends CreatedAt {
 
   @OneToMany(() => Account, (account) => account.wallet)
   accounts: Collection<Account> = new Collection<Account>(this);
-
-  constructor(userId: string) {
-    super();
-    this.userId = userId;
-  }
 }

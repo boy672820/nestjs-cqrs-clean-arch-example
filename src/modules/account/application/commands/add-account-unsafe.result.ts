@@ -1,24 +1,24 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { CommandResultAbstract } from '@common/abstracts';
 import {
-  CreateWalletResult,
+  ICreateWalletResult,
   CreateWalletResultDto,
 } from './create-wallet.result';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface AddAccountUnsafeResult extends Omit<CreateWalletResult, 'phrase'> {}
+interface IAddAccountUnsafeResult extends Omit<ICreateWalletResult, 'phrase'> {}
 
 export class AddAccountUnsafeResultDto
   extends OmitType(CreateWalletResultDto, ['phrase'] as const)
-  implements AddAccountUnsafeResult
+  implements IAddAccountUnsafeResult
 {
-  constructor(props: AddAccountUnsafeResult) {
+  constructor(props: IAddAccountUnsafeResult) {
     super(props);
   }
 }
 
 export class AddAccountUnsafeCommandResult<
-  T extends AddAccountUnsafeResult = AddAccountUnsafeResult,
+  T extends IAddAccountUnsafeResult = IAddAccountUnsafeResult,
 > extends CommandResultAbstract<T> {
   @ApiProperty({
     type: AddAccountUnsafeResultDto,

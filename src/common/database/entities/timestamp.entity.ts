@@ -1,6 +1,7 @@
-import { Property } from '@mikro-orm/core';
+import { Entity, Property } from '@mikro-orm/core';
 
-export class Timestamp {
+@Entity({ abstract: true })
+export abstract class Timestamp {
   @Property({
     type: 'timestamp with time zone',
     name: 'created_at',
@@ -16,7 +17,8 @@ export class Timestamp {
   updatedAt: Date = new Date();
 }
 
-export class CreatedAt {
+@Entity({ abstract: true })
+export abstract class CreatedAt {
   @Property({
     type: 'timestamp with time zone',
     name: 'created_at',

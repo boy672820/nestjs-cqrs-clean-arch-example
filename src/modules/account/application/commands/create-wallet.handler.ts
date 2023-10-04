@@ -32,11 +32,12 @@ export class CreateWalletHandler extends CommandHandlerAbstract<
     const account = wallet.addAccount();
 
     try {
-      await this.walletRepository.save(wallet);
+      await this.walletRepository.create(wallet);
 
       const dto = new CreateWalletResultDto({
         phrase,
         account: {
+          id: account.id,
           address: account.accountAddress,
           privkey: account.privkey,
           balance: account.balance,

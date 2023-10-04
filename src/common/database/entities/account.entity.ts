@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryKey,
+  PrimaryKeyType,
   Property,
 } from '@mikro-orm/core';
 import { Timestamp } from '@common/database/entities';
@@ -15,6 +16,8 @@ import { Transaction } from './transaction.entity';
 @Entity({ tableName: 'accounts', customRepository: () => AccountRepository })
 export class Account extends Timestamp {
   [EntityRepositoryType]?: AccountRepository;
+
+  [PrimaryKeyType]!: [string, string];
 
   @PrimaryKey({ type: 'text', unique: true, name: 'account_id' })
   id!: string;
@@ -47,9 +50,9 @@ export class Account extends Timestamp {
     nullable: true,
     default: null,
   })
-  lockedAt: Date | null = null;
+  lockedAt?: Date | null = null;
 
-  @ManyToOne(() => Wallet, { fieldName: 'user_id' })
+  @ManyToOne(() => Wallet, { primary: true, fieldName: 'user_id' })
   wallet!: Wallet;
 
   @OneToMany(() => Transaction, (transaction) => transaction.sender)

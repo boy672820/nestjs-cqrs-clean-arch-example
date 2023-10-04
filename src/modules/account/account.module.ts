@@ -3,19 +3,31 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account } from '@common/database/entities';
 import { AccountController, WalletController } from './interface';
-import { WalletFactory } from './domain';
-import { AddAccountUnsafeHandler, CreateWalletHandler } from './application';
-import { WalletRepository } from './infrastructure';
+import { AccountFactory, WalletFactory } from './domain';
+import {
+  AddAccountUnsafeHandler,
+  CreateWalletHandler,
+  LockAccountHandler,
+} from './application';
+import { AccountRepository, WalletRepository } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
-const Factories = [WalletFactory];
+const Factories = [WalletFactory, AccountFactory];
 
-const CommandHandlers = [CreateWalletHandler, AddAccountUnsafeHandler];
+const CommandHandlers = [
+  CreateWalletHandler,
+  AddAccountUnsafeHandler,
+  LockAccountHandler,
+];
 
 const Repositories = [
   {
     provide: InjectionToken.WALLET_REPOSITORY,
     useClass: WalletRepository,
+  },
+  {
+    provide: InjectionToken.ACCOUNT_REPOSITORY,
+    useClass: AccountRepository,
   },
 ];
 
