@@ -11,4 +11,13 @@ export interface IAccountRepository {
    * @returns Promise with account or null
    */
   findOne: (id: string, userId: string) => Promise<Account | null>;
+
+  /**
+   * Update account
+   *
+   * If account is not found, do nothing
+   *
+   * @param account - Account
+   */
+  update(account: Account): Promise<void>;
 }

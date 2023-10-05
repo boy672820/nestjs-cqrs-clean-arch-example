@@ -26,6 +26,7 @@ export class DatabaseModule {
             discovery: {
               warnWhenNoEntities: false,
             },
+            debug: process.env.NODE_ENV !== 'production',
           }),
           imports: [DatabaseConfigModule],
           inject: [DatabaseConfigService],

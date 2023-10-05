@@ -2,12 +2,12 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler } from '@nestjs/cqrs';
 import { CommandHandlerAbstract } from '@common/abstracts';
 import { NotFoundAccountException } from '@common/errors';
+import { Transactions } from '@common/database/decorators';
 import { LockAccountCommand } from './lock-account.command';
 import {
   LockAccountCommandResult,
   LockAccountResultDto,
 } from './lock-account.result';
-import { AccountFactory } from '../../domain';
 import { InjectionToken } from '../../account.constants';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 
@@ -17,13 +17,13 @@ export class LockAccountHandler extends CommandHandlerAbstract<
   LockAccountCommandResult
 > {
   constructor(
-    private readonly accountFactory: AccountFactory,
     @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly accountRepository: IAccountRepository,
   ) {
     super();
   }
 
+  @Transactions()
   async execute(command: LockAccountCommand) {
     const { userId, accountId } = command;
 
@@ -35,7 +35,7 @@ export class LockAccountHandler extends CommandHandlerAbstract<
 
     account.lock();
 
-    // await this.accountRepository.save(account);
+    await this.accountRepository.update(account);
 
     const dto = new LockAccountResultDto({
       account: {
