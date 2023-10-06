@@ -151,6 +151,15 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamptz(0)",
@@ -224,20 +233,20 @@
           "length": 6,
           "default": "null",
           "mappedType": "datetime"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
         }
       },
       "name": "accounts",
       "schema": "public",
       "indexes": [
+        {
+          "columnNames": [
+            "account_id"
+          ],
+          "composite": false,
+          "keyName": "accounts_account_id_unique",
+          "primary": false,
+          "unique": true
+        },
         {
           "columnNames": [
             "account_address"
@@ -250,9 +259,10 @@
         {
           "keyName": "accounts_pkey",
           "columnNames": [
-            "account_id"
+            "account_id",
+            "user_id"
           ],
-          "composite": false,
+          "composite": true,
           "primary": true,
           "unique": true
         }
@@ -348,7 +358,8 @@
           ],
           "localTableName": "public.transactions",
           "referencedColumnNames": [
-            "account_id"
+            "account_id",
+            "user_id"
           ],
           "referencedTableName": "public.accounts",
           "updateRule": "cascade"
@@ -360,7 +371,8 @@
           ],
           "localTableName": "public.transactions",
           "referencedColumnNames": [
-            "account_id"
+            "account_id",
+            "user_id"
           ],
           "referencedTableName": "public.accounts",
           "updateRule": "cascade"

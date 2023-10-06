@@ -1,15 +1,17 @@
-import { Controller, Param, Patch } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { User } from '@common/decorators';
 import {
   ApiBasicAuth,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { User } from '@common/decorators';
+import { ApiAccountIdParam, ApiNotFoundAccountResponse } from './decorators';
 import { LockAccountCommand } from '../application/commands/lock-account.command';
 import { LockAccountCommandResult } from '../application/commands/lock-account.result';
+import { OpenAccountCommand } from '../application/commands/open-account.command';
 import type { UserPayload } from '@libs/auth';
 
 @ApiTags('Account')
@@ -22,21 +24,30 @@ export class AccountController {
     summary: 'Lock account',
     description: 'Lock account',
   })
-  @ApiParam({
-    name: 'id',
-    type: 'string',
-    description: 'Account id',
-    example: '01HBTTAG5C1PDRS1K1HXRHKW1N',
-  })
+  @ApiAccountIdParam()
   @ApiOkResponse({
     description: 'Account locked',
     type: LockAccountCommandResult,
   })
+  @ApiNotFoundAccountResponse()
   @Patch('lock/:accountId')
   lockAccount(
     @User() user: UserPayload,
     @Param('accountId') accountId: string,
   ) {
     return this.commandBus.execute(new LockAccountCommand(user.id, accountId));
+  }
+
+  @ApiOperation({ summary: 'Open account', description: 'Open account' })
+  @ApiAccountIdParam()
+  @ApiNoContentResponse()
+  @ApiNotFoundAccountResponse()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch('open/:accountId')
+  openAccount(
+    @User() user: UserPayload,
+    @Param('accountId') accountId: string,
+  ) {
+    return this.commandBus.execute(new OpenAccountCommand(user.id, accountId));
   }
 }

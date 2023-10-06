@@ -28,7 +28,63 @@ The CQRS pattern separates the responsibility of commands and queries to enhance
 
 ## Getting Started
 
+The Getting Started section provides guidance on how to get started with the project. In this section, you will find information on what is required to run the project and how to execute it.
+
+To run this project, you will need the following:
+
+- Node.js (v19 or later)
+- Yarn (v1.22 or later)
+- PostgreSQL (v15 or later)
+
+If you have all of the above installed, you can follow these steps to run the project:
+
+1. Clone this repository.
+2. Open the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-example/blob/main/.env">.env</a> file and modify the database connection information.
+3. Run the `yarn install` command to install the necessary packages for the project.
+4. Run the `yarn db:migrate` command to perform database migration.
+5. Run the `yarn dev` command to start the server.
+6. You can now access the API at <a href="http://localhost:3000">http://localhost:3000</a>.
+
+```shell
+$ git clone https://github.com/boy672820/nestjs-cqrs-clean-arch-example
+Cloning into 'nestjs-cqrs-clean-arch-example'...
+remote: Enumerating objects: 614, done.
+remote: Counting objects: 100% (614/614), done.
+remote: Compressing objects: 100% (407/407), done.
+remote: Total 614 (delta 245), reused 524 (delta 155), pack-reused 0
+Receiving objects: 100% (614/614), 454.45 KiB | 6.22 MiB/s, done.
+Resolving deltas: 100% (245/245), done.
+
+$ yarn install
+yarn install v1.22.19
+[##--------------------------------------------------------------------] 16/71
+...
+
+$ yarn db:migrate
+$ mikro-orm migration:create
+Migration20231006172440.ts successfully created
+✨  Done in 7.59s.
+
+$ yarn dev
+yarn run v1.22.19
+$ nest start --watch
+...
+Enjoy!
+```
+
+You can use the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-example/blob/main/nest-cqrs-clean-arch-example.postman_collection.json">nest-cqrs-clean-arch-example.postman_collection.json</a> file to test the API in Postman. The ERD image (.png) file shows the project's database structure.
+
 ![erd](./erd.png)
+
+Follow the above steps to run the project.
+
+## Tests
+
+Run unit test
+
+```shell
+$ yarn test
+```
 
 ## Contributing
 

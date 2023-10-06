@@ -1,6 +1,10 @@
 import { AggregateRoot } from '@nestjs/cqrs';
-import { AccountAlreadyLockedException } from '@common/errors';
+import {
+  AccountAlreadyLockedException,
+  AccountAlreadyOpenedException,
+} from '@common/errors';
 import { AccountLockedEvent } from './events/account-locked.event';
+import { AccountOpenedEvent } from './events/account-opened.event';
 
 export interface AccountProperties {
   id: string;
@@ -39,5 +43,20 @@ export class Account extends AggregateRoot implements AccountProperties {
     this.isLocked = true;
     this.lockedAt = new Date();
     this.apply(new AccountLockedEvent(this.userId, this.id));
+  }
+
+  /**
+   * Open account
+   *
+   * @throws {AccountAlreadyOpenedException} if account is already opened
+   */
+  open(): void {
+    if (!this.isLocked) {
+      throw new AccountAlreadyOpenedException();
+    }
+
+    this.isLocked = false;
+    this.lockedAt = undefined;
+    this.apply(new AccountOpenedEvent(this.userId, this.id));
   }
 }
