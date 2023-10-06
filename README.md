@@ -40,13 +40,13 @@ If you have all of the above installed, you can follow these steps to run the pr
 
 1. Clone this repository.
 2. Open the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-example/blob/main/.env">.env</a> file and modify the database connection information.
-3. Run the `yarn install` command to install the necessary packages for the project.
+3. Run the `yarn install` command to install the dependency packages for the project.
 4. Run the `yarn db:migrate` command to perform database migration.
 5. Run the `yarn dev` command to start the server.
 6. You can now access the API at <a href="http://localhost:3000">http://localhost:3000</a>.
 
 ```shell
-$ git clone https://github.com/boy672820/nestjs-cqrs-clean-arch-example
+$ git clone https://github.com/boy672820/nestjs-cqrs-clean-arch-example # Clone the repository
 Cloning into 'nestjs-cqrs-clean-arch-example'...
 remote: Enumerating objects: 614, done.
 remote: Counting objects: 100% (614/614), done.
@@ -55,22 +55,24 @@ remote: Total 614 (delta 245), reused 524 (delta 155), pack-reused 0
 Receiving objects: 100% (614/614), 454.45 KiB | 6.22 MiB/s, done.
 Resolving deltas: 100% (245/245), done.
 
-$ yarn install
+$ yarn install # Install the dependency packages
 yarn install v1.22.19
 [##--------------------------------------------------------------------] 16/71
 ...
 
-$ yarn db:migrate
+$ yarn db:migrate # Migrate database
 $ mikro-orm migration:create
 Migration20231006172440.ts successfully created
 ✨  Done in 7.59s.
 
-$ yarn dev
+$ yarn dev # Start the server
 yarn run v1.22.19
 $ nest start --watch
 ...
 Enjoy!
 ```
+
+Also swagger ui address is <a href="http://localhost:3000/api">http://localhost:3000/api</a>
 
 You can use the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-example/blob/main/nest-cqrs-clean-arch-example.postman_collection.json">nest-cqrs-clean-arch-example.postman_collection.json</a> file to test the API in Postman. The ERD image (.png) file shows the project's database structure.
 
@@ -80,10 +82,8 @@ Follow the above steps to run the project.
 
 ## Tests
 
-Run unit test
-
 ```shell
-$ yarn test
+$ yarn test # Run unit test
 ```
 
 ## Contributing
