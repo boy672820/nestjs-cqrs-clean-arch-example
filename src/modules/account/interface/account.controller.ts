@@ -1,4 +1,11 @@
-import { Controller, HttpCode, HttpStatus, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBasicAuth,
@@ -19,6 +26,13 @@ import type { UserPayload } from '@libs/auth';
 @Controller('accounts')
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}
+
+  @ApiOperation({
+    summary: 'Transfer',
+    description: 'Transfer tokens between accounts',
+  })
+  @Post('transfer/:accountId')
+  transfer() {}
 
   @ApiOperation({
     summary: 'Lock account',

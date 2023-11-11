@@ -78,6 +78,8 @@ You can use the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-exa
 
 ![erd](./erd.png)
 
+![withdraw-sequence-diagram](./withdraw-sequence-diagram.png)
+
 Follow the above steps to run the project.
 
 ## Tests
