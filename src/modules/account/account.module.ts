@@ -9,6 +9,7 @@ import {
   CreateWalletHandler,
   LockAccountHandler,
   OpenAccountHandler,
+  TransferHandler,
 } from './application';
 import { AccountRepository, WalletRepository } from './infrastructure';
 import { InjectionToken } from './account.constants';
@@ -20,6 +21,7 @@ const CommandHandlers = [
   AddAccountUnsafeHandler,
   LockAccountHandler,
   OpenAccountHandler,
+  TransferHandler,
 ];
 
 const Repositories = [

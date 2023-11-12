@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   HttpCode,
   HttpStatus,
@@ -15,11 +16,19 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
-import { ApiAccountIdParam, ApiNotFoundAccountResponse } from './decorators';
+import { UlidValidationPipe } from '@common/pipes';
+import {
+  Account,
+  ApiAccountIdParam,
+  ApiNotFoundAccountResponse,
+} from './decorators';
 import { LockAccountCommand } from '../application/commands/lock-account.command';
 import { LockAccountCommandResult } from '../application/commands/lock-account.result';
 import { OpenAccountCommand } from '../application/commands/open-account.command';
+import { TransferCommand } from '../application/commands/transfer.command';
 import type { UserPayload } from '@libs/auth';
+import type { UserPayloadExtended } from '../account.types';
+import { TransferDto } from './dto';
 
 @ApiTags('Account')
 @ApiBasicAuth()
@@ -31,8 +40,17 @@ export class AccountController {
     summary: 'Transfer',
     description: 'Transfer tokens between accounts',
   })
+  @Account()
   @Post('transfer/:accountId')
-  transfer() {}
+  transfer(
+    @User() user: UserPayloadExtended,
+    @Param('accountId', UlidValidationPipe) accountId: string,
+    @Body() dto: TransferDto,
+  ) {
+    return this.commandBus.execute(
+      new TransferCommand(user.account.id, accountId, dto.amount),
+    );
+  }
 
   @ApiOperation({
     summary: 'Lock account',

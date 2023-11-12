@@ -3,8 +3,8 @@ import { Account as AccountEntity } from '@common/database/entities';
 import { Account } from '../../domain/account';
 import { AccountFactory } from '../../domain';
 import { EntityManager } from '@mikro-orm/postgresql';
-import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 import { wrap } from '@mikro-orm/core';
+import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 
 @Injectable()
 export class AccountRepository implements IAccountRepository {
