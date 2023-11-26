@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Headers,
   HttpCode,
   HttpStatus,
   Param,
@@ -14,23 +15,19 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { UlidValidationPipe } from '@common/pipes';
-import {
-  Account,
-  ApiAccountIdParam,
-  ApiNotFoundAccountResponse,
-} from './decorators';
+import { ApiAccountIdParam, ApiNotFoundAccountResponse } from './decorators';
 import { LockAccountCommand } from '../application/commands/lock-account.command';
 import { LockAccountCommandResult } from '../application/commands/lock-account.result';
 import { OpenAccountCommand } from '../application/commands/open-account.command';
 import { TransferCommand } from '../application/commands/transfer.command';
-import type { UserPayload } from '@libs/auth';
-import type { UserPayloadExtended } from '../account.types';
 import { TransferDto } from './dto';
+import type { UserPayload } from '@libs/auth';
 
-@ApiTags('Account')
+@ApiTags('WithAccount')
 @ApiBasicAuth()
 @Controller('accounts')
 export class AccountController {
@@ -40,15 +37,16 @@ export class AccountController {
     summary: 'Transfer',
     description: 'Transfer tokens between accounts',
   })
-  @Account()
-  @Post('transfer/:accountId')
+  @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
+  @Post('transfer/:destAccountId')
   transfer(
-    @User() user: UserPayloadExtended,
-    @Param('accountId', UlidValidationPipe) accountId: string,
+    @User() user: UserPayload,
+    @Param('destAccountId', UlidValidationPipe) destAccountId: string,
+    @Headers('x-account-id') accountId: string,
     @Body() dto: TransferDto,
   ) {
     return this.commandBus.execute(
-      new TransferCommand(user.account.id, accountId, dto.amount),
+      new TransferCommand(user.id, accountId, destAccountId, dto.amount),
     );
   }
 
@@ -58,7 +56,7 @@ export class AccountController {
   })
   @ApiAccountIdParam()
   @ApiOkResponse({
-    description: 'Account locked',
+    description: 'WithAccount locked',
     type: LockAccountCommandResult,
   })
   @ApiNotFoundAccountResponse()

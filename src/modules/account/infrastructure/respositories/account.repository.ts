@@ -13,7 +13,7 @@ export class AccountRepository implements IAccountRepository {
     private readonly accountFactory: AccountFactory,
   ) {}
 
-  async findOne(id: string, userId: string): Promise<Account | null> {
+  async findOne(id: string, userId?: string): Promise<Account | null> {
     const entity = await this.em.findOne(AccountEntity, [id, userId]);
 
     if (!entity) {
