@@ -72,7 +72,7 @@ $ nest start --watch
 Enjoy!
 ```
 
-Also swagger ui address is <a href="http://localhost:3000/api">http://localhost:3000/api</a>
+Also swagger ui address is <a href="http://localhost:3000/docs">http://localhost:3000/docs</a>
 
 You can use the <a href="https://github.com/boy672820/nestjs-cqrs-clean-arch-example/blob/main/nest-cqrs-clean-arch-example.postman_collection.json">nest-cqrs-clean-arch-example.postman_collection.json</a> file to test the API in Postman. The ERD image (.png) file shows the project's database structure.
 
