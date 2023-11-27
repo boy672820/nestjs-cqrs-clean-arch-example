@@ -151,36 +151,79 @@
 			"name": "accounts",
 			"item": [
 				{
-					"name": "/accounts/lock/:accountId",
+					"name": "/accounts/{accountId}/lock",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}{{api_tag}}/lock/01HBXSFJZ2KMYPAD07AEHJ0Y4B",
+							"raw": "{{base_url}}{{api_tag}}/01HBXRPJVV761ACFBAH96V6ZZA/lock/",
 							"host": [
 								"{{base_url}}{{api_tag}}"
 							],
 							"path": [
+								"01HBXRPJVV761ACFBAH96V6ZZA",
 								"lock",
-								"01HBXSFJZ2KMYPAD07AEHJ0Y4B"
+								""
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "/accounts/open/:accountId",
+					"name": "/accounts/{accountId}/open",
 					"request": {
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}{{api_tag}}/open/01HBXRPJVV761ACFBAH96V6ZZA",
+							"raw": "{{base_url}}{{api_tag}}/01HBXRPJVV761ACFBAH96V6ZZA/open",
 							"host": [
 								"{{base_url}}{{api_tag}}"
 							],
 							"path": [
-								"open",
-								"01HBXRPJVV761ACFBAH96V6ZZA"
+								"01HBXRPJVV761ACFBAH96V6ZZA",
+								"open"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/accounts/{accountId}/transfer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Account-Id",
+								"value": "{{transactional_account_id}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}{{api_tag}}/01hbxrpjvv761acfbah96v6zza/transfer",
+							"host": [
+								"{{base_url}}{{api_tag}}"
+							],
+							"path": [
+								"01hbxrpjvv761acfbah96v6zza",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/accounts/2fa/generate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{api_tag}}/2fa/generate",
+							"host": [
+								"{{base_url}}{{api_tag}}"
+							],
+							"path": [
+								"2fa",
+								"generate"
 							]
 						}
 					},
@@ -272,6 +315,11 @@
 		{
 			"key": "privkey",
 			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "transactional_account_id",
+			"value": "01HBXSFJZ2KMYPAD07AEHJ0Y4B",
 			"type": "string"
 		}
 	]

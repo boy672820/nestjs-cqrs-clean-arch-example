@@ -5,7 +5,7 @@ export abstract class CommandHandlerAbstract<
   TCommand extends ICommand,
   TResult extends CommandResultAbstract | void = void,
 > {
-  execute(command: TCommand): Promise<TResult>;
+  execute(command: TCommand): Promise<TResult> | TResult;
 
   async execute(command: TCommand): Promise<TResult> {
     const result = await this.execute(command);

@@ -27,7 +27,7 @@ import { TransferCommand } from '../application/commands/transfer.command';
 import { TransferDto } from './dto';
 import type { UserPayload } from '@libs/auth';
 
-@ApiTags('WithAccount')
+@ApiTags('Accounts')
 @ApiBasicAuth()
 @Controller('accounts')
 export class AccountController {
@@ -38,7 +38,7 @@ export class AccountController {
     description: 'Transfer tokens between accounts',
   })
   @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
-  @Post('transfer/:destAccountId')
+  @Post(':destAccountId/transfer')
   transfer(
     @User() user: UserPayload,
     @Param('destAccountId', UlidValidationPipe) destAccountId: string,
@@ -60,7 +60,7 @@ export class AccountController {
     type: LockAccountCommandResult,
   })
   @ApiNotFoundAccountResponse()
-  @Patch('lock/:accountId')
+  @Patch(':accountId/lock')
   lockAccount(
     @User() user: UserPayload,
     @Param('accountId') accountId: string,
@@ -73,7 +73,7 @@ export class AccountController {
   @ApiNoContentResponse()
   @ApiNotFoundAccountResponse()
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Patch('open/:accountId')
+  @Patch(':accountId/open')
   openAccount(
     @User() user: UserPayload,
     @Param('accountId') accountId: string,

@@ -1,19 +1,30 @@
-import { CommandHandler } from '@nestjs/cqrs';
-import { CommandHandlerAbstract } from '@common/abstracts';
+import { Inject, StreamableFile } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { GenerateSecretCommand } from './generate-secret.command';
-import { AuthenticatorService } from '../../infrastructure';
+import { IAuthenticatorService } from '../adapters/authenticator.service.interface';
+import { InjectionToken } from '../../account.constants';
 
 @CommandHandler(GenerateSecretCommand)
-export class GenerateSecretHandler extends CommandHandlerAbstract<GenerateSecretCommand> {
-  constructor(private readonly authenticatorService: AuthenticatorService) {
-    super();
-  }
+export class GenerateSecretHandler
+  implements ICommandHandler<GenerateSecretCommand, StreamableFile>
+{
+  constructor(
+    @Inject(InjectionToken.AUTHENTICATOR)
+    private readonly authenticatorService: IAuthenticatorService,
+  ) {}
 
   async execute(command: GenerateSecretCommand) {
     const { userId } = command;
 
-    const token = this.authenticatorService.generate(userId);
+    const { otpAuthUrl } = this.authenticatorService.generate(userId);
 
-    console.log(token);
+    const base64Qrcode = await this.authenticatorService.toDataURL(otpAuthUrl);
+
+    const buffer = Buffer.from(
+      base64Qrcode.replace('data:image/png;base64,', ''),
+      'base64',
+    );
+
+    return new StreamableFile(buffer);
   }
 }

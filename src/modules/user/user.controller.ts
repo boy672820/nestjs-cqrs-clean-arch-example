@@ -4,8 +4,8 @@ import { Public } from '@libs/auth';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
-@ApiTags('User')
-@Controller('user')
+@ApiTags('Users')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

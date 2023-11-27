@@ -45,7 +45,9 @@ const Repositories = [
   },
 ];
 
-const Adapters = [AuthenticatorService];
+const Adapters = [
+  { provide: InjectionToken.AUTHENTICATOR, useClass: AuthenticatorService },
+];
 
 @Module({
   imports: [CqrsModule, MikroOrmModule.forFeature({ entities: [Account] })],
