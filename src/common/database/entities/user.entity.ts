@@ -15,4 +15,7 @@ export class User extends Timestamp {
 
   @Property({ type: 'text', hidden: true, name: 'password' })
   password!: string;
+
+  @Property({ type: 'char', length: 16, nullable: true, name: 'otp_secret' })
+  otpSecret!: string;
 }

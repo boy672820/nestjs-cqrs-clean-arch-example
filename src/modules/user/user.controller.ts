@@ -1,6 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { ApiNoContentResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Public } from '@libs/auth';
+import { Body, Controller, Header, Post, StreamableFile } from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '@common/decorators';
+import { Public, UserPayload } from '@libs/auth';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 
@@ -18,5 +24,21 @@ export class UserController {
   @Post()
   createUser(@Body() dto: CreateUserDto) {
     return this.userService.createUser(dto);
+  }
+
+  @ApiOperation({
+    summary: 'Generate secret',
+    description: 'Generates a TOTP QRCode based on Google Authenticator',
+  })
+  @ApiCreatedResponse({
+    description: 'Returns a QRCode image',
+  })
+  @Post('2fa/generate')
+  @Header('Content-type', 'image/png')
+  @Header('Content-disposition', 'attachment; filename=qr.png')
+  async generate(@User() user: UserPayload) {
+    const buffer = await this.userService.generateSecret(user.id);
+
+    return new StreamableFile(buffer);
   }
 }

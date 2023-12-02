@@ -23,9 +23,12 @@ export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
     );
 
     if (!sourceAccount) {
-      // throw new 
+      // throw new
     }
-    
-    const destAccount = await this.accountRepository.findOne(destAccountId);
+
+    const destAccount = await this.accountRepository.findOne(
+      destAccountId,
+      userId,
+    );
   }
 }

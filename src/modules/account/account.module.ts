@@ -2,23 +2,20 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Account } from '@common/database/entities';
-import {
-  Account2FaController,
-  AccountController,
-  WalletController,
-} from './interface';
+import { AccountController, WalletController } from './interface';
 import { AccountFactory, WalletFactory } from './domain';
 import {
   AddAccountUnsafeHandler,
   CreateWalletHandler,
-  GenerateSecretHandler,
   LockAccountHandler,
   OpenAccountHandler,
   TransferHandler,
+  Verify2faTokenHandler,
 } from './application';
 import {
   AccountRepository,
   AuthenticatorService,
+  UserRepository,
   WalletRepository,
 } from './infrastructure';
 import { InjectionToken } from './account.constants';
@@ -31,7 +28,7 @@ const CommandHandlers = [
   LockAccountHandler,
   OpenAccountHandler,
   TransferHandler,
-  GenerateSecretHandler,
+  Verify2faTokenHandler,
 ];
 
 const Repositories = [
@@ -43,6 +40,10 @@ const Repositories = [
     provide: InjectionToken.ACCOUNT_REPOSITORY,
     useClass: AccountRepository,
   },
+  {
+    provide: InjectionToken.USER_REPOSITORY,
+    useClass: UserRepository,
+  },
 ];
 
 const Adapters = [
@@ -52,6 +53,6 @@ const Adapters = [
 @Module({
   imports: [CqrsModule, MikroOrmModule.forFeature({ entities: [Account] })],
   providers: [...Factories, ...CommandHandlers, ...Repositories, ...Adapters],
-  controllers: [WalletController, AccountController, Account2FaController],
+  controllers: [WalletController, AccountController],
 })
 export class AccountModule {}

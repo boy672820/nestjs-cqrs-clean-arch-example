@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import {
   Account as AccountEntity,
   Wallet as WalletEntity,
 } from '@common/database/entities';
+import { WalletFactory } from '../../domain';
 import { Wallet } from '../../domain/wallet';
 import type { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
-import { WalletFactory } from '../../domain';
-import { wrap } from '@mikro-orm/core';
 
 @Injectable()
 export class WalletRepository implements IWalletRepository {

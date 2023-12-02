@@ -11,7 +11,11 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ApiBasicAuth,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -24,6 +28,7 @@ import { LockAccountCommand } from '../application/commands/lock-account.command
 import { LockAccountCommandResult } from '../application/commands/lock-account.result';
 import { OpenAccountCommand } from '../application/commands/open-account.command';
 import { TransferCommand } from '../application/commands/transfer.command';
+import { Verify2faTokenCommand } from '../application/commands/verify-2fa-token.command';
 import { TransferDto } from './dto';
 import type { UserPayload } from '@libs/auth';
 
@@ -79,5 +84,25 @@ export class AccountController {
     @Param('accountId') accountId: string,
   ) {
     return this.commandBus.execute(new OpenAccountCommand(user.id, accountId));
+  }
+
+  @ApiOperation({
+    summary: 'Verify token',
+    description: 'Verifies a TOTP token',
+  })
+  @ApiCreatedResponse({ description: 'Token verified' })
+  @ApiConflictResponse({ description: '2FA not enabled' })
+  @ApiNotFoundResponse({ description: 'Account not found' })
+  @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
+  @ApiForbiddenResponse({ description: 'Invalid token' })
+  @Post(':accountId/verify')
+  verify(
+    @User() user: UserPayload,
+    @Param('accountId') accountId: string,
+    @Headers('x-2fa-token') token: string,
+  ) {
+    return this.commandBus.execute(
+      new Verify2faTokenCommand(user.id, accountId, token),
+    );
   }
 }

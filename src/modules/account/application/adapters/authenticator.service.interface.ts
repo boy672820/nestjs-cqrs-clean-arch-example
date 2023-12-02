@@ -1,21 +1,9 @@
-type GeneratedAuthenticator = {
-  secret: string;
-  token: string;
-  otpAuthUrl: string;
-};
-
 export interface IAuthenticatorService {
   /**
-   * Generates a new authenticator for the given user.
+   * Verifies the given token for the given user.
    *
-   * @param userId The user id.
+   * @param secret The secret to verify.
+   * @param token The token to verify.
    */
-  generate(userId: string): GeneratedAuthenticator;
-
-  /**
-   * Generates a QR code data URL for the given OTP auth URL.
-   *
-   * @param otpAuthUrl The OTP auth URL.
-   */
-  toDataURL(otpAuthUrl: string): Promise<string>;
+  verify(secret: string, token: string): boolean;
 }
