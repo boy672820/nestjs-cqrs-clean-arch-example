@@ -5,6 +5,11 @@ import { NotFoundAccountException } from '@common/errors';
 import { OpenAccountCommand } from './open-account.command';
 import { InjectionToken } from '../../account.constants';
 
+const mockAccountRepository: IAccountRepository = {
+  findOne: jest.fn(),
+  update: jest.fn(),
+};
+
 describe('OpenAccountHandler', () => {
   let handler: OpenAccountHandler;
   let accountRepository: IAccountRepository;
@@ -15,10 +20,7 @@ describe('OpenAccountHandler', () => {
         OpenAccountHandler,
         {
           provide: InjectionToken.ACCOUNT_REPOSITORY,
-          useValue: {
-            findOne: jest.fn(),
-            update: jest.fn(),
-          },
+          useValue: mockAccountRepository,
         },
       ],
     }).compile();

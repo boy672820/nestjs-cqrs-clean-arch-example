@@ -12,12 +12,16 @@ import {
 } from '@common/errors';
 import { Verify2faTokenCommand } from './verify-2fa-token.command';
 import { InjectionToken } from '../../account.constants';
+import { Verify2faTokenCommandResult } from './verify-2fa-token.result';
 import type { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 import type { IAuthenticatorService } from '../adapters/authenticator.service.interface';
 
 @CommandHandler(Verify2faTokenCommand)
-export class Verify2faTokenHandler extends CommandHandlerAbstract<Verify2faTokenCommand> {
+export class Verify2faTokenHandler extends CommandHandlerAbstract<
+  Verify2faTokenCommand,
+  Verify2faTokenCommandResult
+> {
   constructor(
     @Inject(InjectionToken.USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
@@ -61,5 +65,11 @@ export class Verify2faTokenHandler extends CommandHandlerAbstract<Verify2faToken
     if (!isValid) {
       throw new ForbiddenException();
     }
+
+    const signedToken = this.authenticatorService.sign(user.id, account.id);
+
+    return new Verify2faTokenCommandResult(true, 'Signed token', {
+      signedToken,
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('app', () => ({
-  otpService: process.env.APP_OTP_SERVICE,
+  serviceName: process.env.APP_SERVICE_NAME,
+  jwtSecret: process.env.APP_JWT_SECRET,
 }));

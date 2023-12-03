@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { JwtModule } from '@nestjs/jwt';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { AppConfigModule, AppConfigService } from '@config';
 import { Account } from '@common/database/entities';
 import { AccountController, WalletController } from './interface';
 import { AccountFactory, WalletFactory } from './domain';
@@ -51,7 +53,19 @@ const Adapters = [
 ];
 
 @Module({
-  imports: [CqrsModule, MikroOrmModule.forFeature({ entities: [Account] })],
+  imports: [
+    AppConfigModule,
+    CqrsModule,
+    MikroOrmModule.forFeature({ entities: [Account] }),
+    JwtModule.registerAsync({
+      imports: [AppConfigModule],
+      useFactory: (config: AppConfigService) => ({
+        secret: config.jwtSecret,
+        signOptions: { expiresIn: '3m' },
+      }),
+      inject: [AppConfigService],
+    }),
+  ],
   providers: [...Factories, ...CommandHandlers, ...Repositories, ...Adapters],
   controllers: [WalletController, AccountController],
 })

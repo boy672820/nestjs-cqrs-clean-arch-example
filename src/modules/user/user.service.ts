@@ -45,7 +45,7 @@ export class UserService {
 
     const otpAuthUrl = authenticator.keyuri(
       userId,
-      this.appConfigService.otpService,
+      this.appConfigService.serviceName,
       secret,
     );
     const base64 = await toDataURL(otpAuthUrl);

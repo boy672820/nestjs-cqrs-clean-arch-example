@@ -5,6 +5,11 @@ import { NotFoundAccountException } from '@common/errors';
 import { LockAccountCommand } from './lock-account.command';
 import { InjectionToken } from '../../account.constants';
 
+const mockAccountRepository: IAccountRepository = {
+  findOne: jest.fn(),
+  update: jest.fn(),
+};
+
 describe('LockAccountHandler', () => {
   let handler: LockAccountHandler;
   let accountRepository: IAccountRepository;
@@ -15,10 +20,7 @@ describe('LockAccountHandler', () => {
         LockAccountHandler,
         {
           provide: InjectionToken.ACCOUNT_REPOSITORY,
-          useValue: {
-            findOne: jest.fn(),
-            update: jest.fn(),
-          },
+          useValue: mockAccountRepository,
         },
       ],
     }).compile();

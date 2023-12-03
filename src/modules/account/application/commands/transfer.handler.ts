@@ -14,21 +14,5 @@ export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
     super();
   }
 
-  async execute(command: TransferCommand) {
-    const { userId, sourceAccountId, destAccountId, amount } = command;
-
-    const sourceAccount = await this.accountRepository.findOne(
-      sourceAccountId,
-      userId,
-    );
-
-    if (!sourceAccount) {
-      // throw new
-    }
-
-    const destAccount = await this.accountRepository.findOne(
-      destAccountId,
-      userId,
-    );
-  }
+  async execute(command: TransferCommand) {}
 }

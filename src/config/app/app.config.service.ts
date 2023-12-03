@@ -7,7 +7,11 @@ const prefix = (key: string) => `app.${key}`;
 export class AppConfigService {
   constructor(private readonly config: ConfigService) {}
 
-  get otpService(): string {
-    return this.config.get(prefix('otpService'));
+  get serviceName(): string {
+    return this.config.get(prefix('serviceName'));
+  }
+
+  get jwtSecret(): string {
+    return this.config.get(prefix('jwtSecret'));
   }
 }

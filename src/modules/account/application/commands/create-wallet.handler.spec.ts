@@ -1,7 +1,9 @@
+import { Test } from '@nestjs/testing';
 import { WalletFactory } from '../../domain';
-import { WalletRepository } from '../../infrastructure';
+import { IWalletRepository } from '../../domain/repositories/wallet.repository.interface';
 import { CreateWalletCommand } from './create-wallet.command';
 import { CreateWalletHandler } from './create-wallet.handler';
+import { InjectionToken } from '../../account.constants';
 
 const userId = 'id';
 const wallet = {
@@ -15,22 +17,40 @@ const wallet = {
   })),
 };
 
+const mockWalletRepository: IWalletRepository = {
+  create: jest.fn(),
+  addAccount: jest.fn(),
+  findByUserId: jest.fn(),
+};
+
 describe('CreateWalletHandler', () => {
   let createWalletHandler: CreateWalletHandler;
   let walletFactory: WalletFactory;
-  let walletRepository: WalletRepository;
+  let walletRepository: IWalletRepository;
 
-  beforeEach(() => {
-    walletRepository = {
-      create: jest.fn(),
-    } as any;
-    walletFactory = {
-      create: jest.fn(() => wallet),
-    } as any;
-    createWalletHandler = new CreateWalletHandler(
-      walletFactory,
-      walletRepository,
+  beforeEach(async () => {
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        CreateWalletHandler,
+        {
+          provide: InjectionToken.WALLET_REPOSITORY,
+          useValue: mockWalletRepository,
+        },
+        {
+          provide: WalletFactory,
+          useValue: {
+            create: jest.fn(() => wallet),
+          },
+        },
+      ],
+    }).compile();
+
+    createWalletHandler =
+      moduleRef.get<CreateWalletHandler>(CreateWalletHandler);
+    walletRepository = moduleRef.get<IWalletRepository>(
+      InjectionToken.WALLET_REPOSITORY,
     );
+    walletFactory = moduleRef.get<WalletFactory>(WalletFactory);
   });
 
   it('should create a new wallet and save it to the repository', async () => {
