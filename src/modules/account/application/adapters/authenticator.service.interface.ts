@@ -14,11 +14,4 @@ export interface IAuthenticatorService {
    * @param accountId The account id to sign.
    */
   sign(userId: string, accountId: string): string;
-
-  /**
-   * Verify json web token.
-   *
-   * @param token The token to verify.
-   */
-  verifyJwt(token: string): { userId: string; accountId: string };
 }

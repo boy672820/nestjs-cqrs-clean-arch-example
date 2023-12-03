@@ -26,10 +26,4 @@ export class AuthenticatorService implements IAuthenticatorService {
 
     return token;
   }
-
-  verifyJwt(token: string): { userId: string; accountId: string } {
-    const { sub: userId, accountId } = this.jwtService.verify(token);
-
-    return { userId, accountId };
-  }
 }

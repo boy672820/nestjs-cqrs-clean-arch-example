@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
@@ -30,7 +31,8 @@ import { OpenAccountCommand } from '../application/commands/open-account.command
 import { TransferCommand } from '../application/commands/transfer.command';
 import { Verify2faTokenCommand } from '../application/commands/verify-2fa-token.command';
 import { TransferDto } from './dto';
-import type { UserPayload } from '@libs/auth';
+import { SignedTokenGuard } from './guards';
+import { Public, type UserPayload } from '@libs/auth';
 
 @ApiTags('Accounts')
 @ApiBasicAuth()
@@ -43,15 +45,16 @@ export class AccountController {
     description: 'Transfer tokens between accounts',
   })
   @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
+  @Public()
+  @UseGuards(SignedTokenGuard)
   @Post(':destAccountId/transfer')
   transfer(
-    @User() user: UserPayload,
+    @User() { userId, accountId }: { userId: string; accountId: string },
     @Param('destAccountId', UlidValidationPipe) destAccountId: string,
-    @Headers('x-account-id') accountId: string,
     @Body() dto: TransferDto,
   ) {
     return this.commandBus.execute(
-      new TransferCommand(user.id, accountId, destAccountId, dto.amount),
+      new TransferCommand(userId, accountId, destAccountId, dto.amount),
     );
   }
 
