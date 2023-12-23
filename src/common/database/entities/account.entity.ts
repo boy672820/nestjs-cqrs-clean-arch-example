@@ -60,4 +60,10 @@ export class Account extends Timestamp {
 
   @OneToMany(() => Transaction, (transaction) => transaction.recipient)
   recipientTxs: Collection<Transaction> = new Collection<Transaction>(this);
+
+  constructor(id: string, wallet: Wallet) {
+    super();
+    this.id = id;
+    this.wallet = wallet;
+  }
 }

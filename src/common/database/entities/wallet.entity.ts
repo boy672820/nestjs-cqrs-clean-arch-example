@@ -23,4 +23,9 @@ export class Wallet extends CreatedAt {
 
   @OneToMany(() => Account, (account) => account.wallet)
   accounts: Collection<Account> = new Collection<Account>(this);
+
+  constructor(userId: string) {
+    super();
+    this.userId = userId;
+  }
 }

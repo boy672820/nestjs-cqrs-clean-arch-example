@@ -1,6 +1,7 @@
 import { CommandHandler } from '@nestjs/cqrs';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { CommandHandlerAbstract } from '@common/abstracts';
+import { NotFoundAccountException } from '@common/errors';
 import { TransferCommand } from './transfer.command';
 import { InjectionToken } from '../../account.constants';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
@@ -18,12 +19,23 @@ export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
     const { userId, sourceAccountId, destAccountId, amount } = command;
 
     const sourceAccount = await this.accountRepository.findOne(
-      userId,
       sourceAccountId,
+      userId,
     );
 
     if (!sourceAccount) {
       throw new UnauthorizedException();
     }
+
+    const destAaccount = await this.accountRepository.findOneById(
+      destAccountId,
+    );
+
+    // Check if account exists
+    if (!destAaccount) {
+      throw new NotFoundAccountException();
+    }
+
+    sourceAccount.transferTo(destAaccount, amount);
   }
 }

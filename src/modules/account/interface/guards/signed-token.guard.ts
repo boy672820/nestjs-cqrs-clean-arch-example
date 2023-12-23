@@ -15,9 +15,8 @@ export class SignedTokenGuard implements CanActivate {
 
     try {
       const payload = this.jwtService.verify(token);
-      const isValid = this.checkPayload(payload);
 
-      if (!isValid) {
+      if (this.invalidPayload(payload)) {
         return false;
       }
 
@@ -57,11 +56,13 @@ export class SignedTokenGuard implements CanActivate {
    * @param payload The payload to check.
    * @returns True if payload is valid.
    */
-  private checkPayload = (payload: unknown): boolean =>
-    typeof payload === 'object' &&
-    payload !== null &&
-    'sub' in payload &&
-    typeof payload.sub === 'string' &&
-    'accountId' in payload &&
-    typeof payload.accountId === 'string';
+  private invalidPayload = (payload: unknown): boolean =>
+    !(
+      typeof payload === 'object' &&
+      payload !== null &&
+      'sub' in payload &&
+      typeof payload.sub === 'string' &&
+      'accountId' in payload &&
+      typeof payload.accountId === 'string'
+    );
 }

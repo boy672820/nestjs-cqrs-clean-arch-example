@@ -7,6 +7,7 @@ import { InjectionToken } from '../../account.constants';
 
 const mockAccountRepository: IAccountRepository = {
   findOne: jest.fn(),
+  findOneById: jest.fn(),
   update: jest.fn(),
 };
 

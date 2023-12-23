@@ -17,12 +17,12 @@ const mockUserRepository: IUserRepository = {
 };
 const mockAccountRepository: IAccountRepository = {
   findOne: jest.fn(),
+  findOneById: jest.fn(),
   update: jest.fn(),
 };
 const mockAuthenticatorService: IAuthenticatorService = {
   verify: jest.fn(),
   sign: jest.fn(),
-  verifyJwt: jest.fn(),
 };
 
 describe('Verify2faTokenHandler', () => {
