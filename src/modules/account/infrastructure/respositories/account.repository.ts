@@ -23,7 +23,7 @@ export class AccountRepository implements IAccountRepository {
     return this.entityToModel(entity);
   }
 
-  async findOneById(id: string): Promise<Account | null> {
+  async findById(id: string): Promise<Account | null> {
     const entity = await this.em.findOne(AccountEntity, { id });
 
     if (!entity) {

@@ -11,25 +11,13 @@ import { IAuthenticatorService } from '../adapters/authenticator.service.interfa
 import { Verify2faTokenCommand } from './verify-2fa-token.command';
 import type { IUserRepository } from '../../domain/repositories/user.repository.interface';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
-
-const mockUserRepository: IUserRepository = {
-  findOne: jest.fn(),
-};
-const mockAccountRepository: IAccountRepository = {
-  findOne: jest.fn(),
-  findOneById: jest.fn(),
-  update: jest.fn(),
-};
-const mockAuthenticatorService: IAuthenticatorService = {
-  verify: jest.fn(),
-  sign: jest.fn(),
-};
+import { MockProxy, mock } from 'jest-mock-extended';
 
 describe('Verify2faTokenHandler', () => {
   let handler: Verify2faTokenHandler;
-  let userRepository: IUserRepository;
-  let accountRepository: IAccountRepository;
-  let authenticatorService: IAuthenticatorService;
+  let userRepository: MockProxy<IUserRepository>;
+  let accountRepository: MockProxy<IAccountRepository>;
+  let authenticatorService: MockProxy<IAuthenticatorService>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -37,27 +25,27 @@ describe('Verify2faTokenHandler', () => {
         Verify2faTokenHandler,
         {
           provide: InjectionToken.USER_REPOSITORY,
-          useValue: mockUserRepository,
+          useValue: mock<IUserRepository>(),
         },
         {
           provide: InjectionToken.ACCOUNT_REPOSITORY,
-          useValue: mockAccountRepository,
+          useValue: mock<IAccountRepository>(),
         },
         {
           provide: InjectionToken.AUTHENTICATOR,
-          useValue: mockAuthenticatorService,
+          useValue: mock<IAuthenticatorService>(),
         },
       ],
     }).compile();
 
     handler = moduleRef.get<Verify2faTokenHandler>(Verify2faTokenHandler);
-    userRepository = moduleRef.get<IUserRepository>(
+    userRepository = moduleRef.get<MockProxy<IUserRepository>>(
       InjectionToken.USER_REPOSITORY,
     );
-    accountRepository = moduleRef.get<IAccountRepository>(
+    accountRepository = moduleRef.get<MockProxy<IAccountRepository>>(
       InjectionToken.ACCOUNT_REPOSITORY,
     );
-    authenticatorService = moduleRef.get<IAuthenticatorService>(
+    authenticatorService = moduleRef.get<MockProxy<IAuthenticatorService>>(
       InjectionToken.AUTHENTICATOR,
     );
   });

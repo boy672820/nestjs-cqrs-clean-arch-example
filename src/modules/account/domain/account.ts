@@ -67,10 +67,10 @@ export class Account extends AggregateRoot implements AccountProperties {
       throw new InsufficientFundsException();
     }
 
-    this.balance = new BigNumber(this.balance).minus(amount).toString();
     destAccount.balance = new BigNumber(destAccount.balance)
       .plus(amount)
       .toString();
+    this.balance = new BigNumber(this.balance).minus(amount).toString();
   }
 
   /**

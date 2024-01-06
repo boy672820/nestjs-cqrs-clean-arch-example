@@ -98,7 +98,7 @@ export class AccountController {
   @ApiNotFoundResponse({ description: 'Account not found' })
   @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
   @ApiForbiddenResponse({ description: 'Invalid token' })
-  @Post(':accountId/verify')
+  @Post(':accountId/otp-verify')
   verify(
     @User() user: UserPayload,
     @Param('accountId') accountId: string,

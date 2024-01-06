@@ -4,16 +4,11 @@ import { IAccountRepository } from '../../domain/repositories/account.repository
 import { NotFoundAccountException } from '@common/errors';
 import { OpenAccountCommand } from './open-account.command';
 import { InjectionToken } from '../../account.constants';
-
-const mockAccountRepository: IAccountRepository = {
-  findOne: jest.fn(),
-  findOneById: jest.fn(),
-  update: jest.fn(),
-};
+import { MockProxy, mock } from 'jest-mock-extended';
 
 describe('OpenAccountHandler', () => {
   let handler: OpenAccountHandler;
-  let accountRepository: IAccountRepository;
+  let accountRepository: MockProxy<IAccountRepository>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -21,13 +16,13 @@ describe('OpenAccountHandler', () => {
         OpenAccountHandler,
         {
           provide: InjectionToken.ACCOUNT_REPOSITORY,
-          useValue: mockAccountRepository,
+          useValue: mock<IAccountRepository>(),
         },
       ],
     }).compile();
 
     handler = moduleRef.get<OpenAccountHandler>(OpenAccountHandler);
-    accountRepository = moduleRef.get<IAccountRepository>(
+    accountRepository = moduleRef.get<MockProxy<IAccountRepository>>(
       InjectionToken.ACCOUNT_REPOSITORY,
     );
   });

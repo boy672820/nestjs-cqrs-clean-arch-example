@@ -4,6 +4,7 @@ import { IWalletRepository } from '../../domain/repositories/wallet.repository.i
 import { CreateWalletCommand } from './create-wallet.command';
 import { CreateWalletHandler } from './create-wallet.handler';
 import { InjectionToken } from '../../account.constants';
+import { MockProxy, mock } from 'jest-mock-extended';
 
 const userId = 'id';
 const wallet = {
@@ -17,16 +18,10 @@ const wallet = {
   })),
 };
 
-const mockWalletRepository: IWalletRepository = {
-  create: jest.fn(),
-  addAccount: jest.fn(),
-  findByUserId: jest.fn(),
-};
-
 describe('CreateWalletHandler', () => {
   let createWalletHandler: CreateWalletHandler;
   let walletFactory: WalletFactory;
-  let walletRepository: IWalletRepository;
+  let walletRepository: MockProxy<IWalletRepository>;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -34,7 +29,7 @@ describe('CreateWalletHandler', () => {
         CreateWalletHandler,
         {
           provide: InjectionToken.WALLET_REPOSITORY,
-          useValue: mockWalletRepository,
+          useValue: mock<IWalletRepository>(),
         },
         {
           provide: WalletFactory,
@@ -47,7 +42,7 @@ describe('CreateWalletHandler', () => {
 
     createWalletHandler =
       moduleRef.get<CreateWalletHandler>(CreateWalletHandler);
-    walletRepository = moduleRef.get<IWalletRepository>(
+    walletRepository = moduleRef.get<MockProxy<IWalletRepository>>(
       InjectionToken.WALLET_REPOSITORY,
     );
     walletFactory = moduleRef.get<WalletFactory>(WalletFactory);
