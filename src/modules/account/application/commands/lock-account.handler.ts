@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler } from '@nestjs/cqrs';
 import { CommandHandlerAbstract } from '@common/abstracts';
 import { NotFoundAccountException } from '@common/errors';
-import { Transactions } from '@common/database/decorators';
+import { Transactional } from '@common/database/decorators';
 import { LockAccountCommand } from './lock-account.command';
 import {
   LockAccountCommandResult,
@@ -23,7 +23,7 @@ export class LockAccountHandler extends CommandHandlerAbstract<
     super();
   }
 
-  @Transactions()
+  @Transactional()
   async execute(command: LockAccountCommand) {
     const { userId, accountId } = command;
 

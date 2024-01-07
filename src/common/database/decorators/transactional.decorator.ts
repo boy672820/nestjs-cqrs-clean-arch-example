@@ -4,7 +4,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
  * @description Decorator to wrap a method in a transaction for all EntityManager properties.
  * @returns Decorator function.
  */
-export function Transactions() {
+export function Transactional() {
   return function (
     _target: any,
     _propertyKey: string,
@@ -18,20 +18,14 @@ export function Transactions() {
 
         for (const key in property) {
           if (property[key] instanceof EntityManager) {
-            property[key] = property[key].fork();
+            const result = await (property[key] as EntityManager).transactional(
+              async (em) => {
+                this[key] = em;
+                return await originalMethod.apply(this, args);
+              },
+            );
 
-            const em = property[key];
-            em.begin();
-
-            try {
-              const result = await originalMethod.apply(this, args);
-
-              await em.commit();
-              return result;
-            } catch (e) {
-              await em.rollback();
-              throw e;
-            }
+            return result;
           }
         }
       }

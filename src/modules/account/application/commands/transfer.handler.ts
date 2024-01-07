@@ -2,7 +2,7 @@ import { CommandHandler } from '@nestjs/cqrs';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { CommandHandlerAbstract } from '@common/abstracts';
 import { NotFoundAccountException } from '@common/errors';
-import { Transactions } from '@common/database/decorators';
+import { Transactional } from '@common/database/decorators';
 import { TransferCommand } from './transfer.command';
 import { InjectionToken } from '../../account.constants';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
@@ -16,7 +16,7 @@ export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
     super();
   }
 
-  @Transactions()
+  @Transactional()
   async execute(command: TransferCommand) {
     const { userId, sourceAccountId, destAccountId, amount } = command;
 

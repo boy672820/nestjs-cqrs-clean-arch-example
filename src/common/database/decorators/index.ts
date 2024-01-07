@@ -1,1 +1,1 @@
-export * from './transactions.decorator';
+export * from './transactional.decorator';
