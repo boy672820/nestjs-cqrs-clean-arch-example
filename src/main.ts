@@ -35,6 +35,10 @@ async function bootstrap() {
         )
         .setLicense('MIT', 'https://opensource.org/licenses/MIT')
         .addBasicAuth()
+        .addBearerAuth(
+          { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+          'signed-token',
+        )
         .build(),
     ),
   );

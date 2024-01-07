@@ -24,21 +24,33 @@ import {
 } from '@nestjs/swagger';
 import { User } from '@common/decorators';
 import { UlidValidationPipe } from '@common/pipes';
-import { ApiAccountIdParam, ApiNotFoundAccountResponse } from './decorators';
+import {
+  ApiAccountIdParam,
+  ApiNotFoundAccountResponse,
+  ApiSignedToken,
+} from './decorators';
 import { LockAccountCommand } from '../application/commands/lock-account.command';
 import { LockAccountCommandResult } from '../application/commands/lock-account.result';
 import { OpenAccountCommand } from '../application/commands/open-account.command';
 import { TransferCommand } from '../application/commands/transfer.command';
 import { Verify2faTokenCommand } from '../application/commands/verify-2fa-token.command';
 import { TransferDto } from './dto';
-import { SignedTokenGuard } from './guards';
 import { Public, type UserPayload } from '@libs/auth';
 
 @ApiTags('Accounts')
-@ApiBasicAuth()
 @Controller('accounts')
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}
+
+  @ApiOperation({
+    summary: 'Withdraw',
+    description:
+      'This is a withdrawal API that sends the currently held tokens to the specified EOA',
+  })
+  @Public()
+  @ApiSignedToken()
+  @Post('withdraw')
+  withdraw() {}
 
   @ApiOperation({
     summary: 'Transfer',
@@ -46,7 +58,7 @@ export class AccountController {
   })
   @ApiUnprocessableEntityResponse({ description: 'Account is locked' })
   @Public()
-  @UseGuards(SignedTokenGuard)
+  @ApiSignedToken()
   @Post(':destAccountId/transfer')
   transfer(
     @User() { userId, accountId }: { userId: string; accountId: string },
@@ -62,6 +74,7 @@ export class AccountController {
     summary: 'Lock account',
     description: 'Lock account',
   })
+  @ApiBasicAuth()
   @ApiAccountIdParam()
   @ApiOkResponse({
     description: 'WithAccount locked',
@@ -77,6 +90,7 @@ export class AccountController {
   }
 
   @ApiOperation({ summary: 'Open account', description: 'Open account' })
+  @ApiBasicAuth()
   @ApiAccountIdParam()
   @ApiNoContentResponse()
   @ApiNotFoundAccountResponse()
@@ -93,6 +107,7 @@ export class AccountController {
     summary: 'Verify token',
     description: 'Verifies a TOTP token',
   })
+  @ApiBasicAuth()
   @ApiCreatedResponse({ description: 'Token verified' })
   @ApiConflictResponse({ description: '2FA not enabled' })
   @ApiNotFoundResponse({ description: 'Account not found' })
