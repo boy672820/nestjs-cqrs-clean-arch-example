@@ -13,6 +13,7 @@ import {
   OpenAccountHandler,
   TransferHandler,
   Verify2faTokenHandler,
+  WithdrawHandler,
 } from './application';
 import {
   AccountRepository,
@@ -30,6 +31,7 @@ const CommandHandlers = [
   LockAccountHandler,
   OpenAccountHandler,
   TransferHandler,
+  WithdrawHandler,
   Verify2faTokenHandler,
 ];
 

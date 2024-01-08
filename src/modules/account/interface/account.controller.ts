@@ -34,7 +34,8 @@ import { LockAccountCommandResult } from '../application/commands/lock-account.r
 import { OpenAccountCommand } from '../application/commands/open-account.command';
 import { TransferCommand } from '../application/commands/transfer.command';
 import { Verify2faTokenCommand } from '../application/commands/verify-2fa-token.command';
-import { TransferDto } from './dto';
+import { WithdrawCommand } from '../application/commands/withdraw.command';
+import { TransferDto, WithdrawDto } from './dto';
 import { Public, type UserPayload } from '@libs/auth';
 
 @ApiTags('Accounts')
@@ -50,7 +51,14 @@ export class AccountController {
   @Public()
   @ApiSignedToken()
   @Post('withdraw')
-  withdraw() {}
+  withdraw(
+    @User() { userId, accountId }: { userId: string; accountId: string },
+    @Body() dto: WithdrawDto,
+  ) {
+    return this.commandBus.execute(
+      new WithdrawCommand(userId, accountId, dto.amount, dto.destAddress),
+    );
+  }
 
   @ApiOperation({
     summary: 'Transfer',
