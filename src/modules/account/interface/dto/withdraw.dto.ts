@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberString } from 'class-validator';
+import { IsEthereumAddress, IsNumberString } from 'class-validator';
 
 export class WithdrawDto {
   @ApiProperty({
@@ -13,5 +13,6 @@ export class WithdrawDto {
     description: 'destination address',
     example: '0x1234567890123456789012345678901234567890',
   })
+  @IsEthereumAddress()
   readonly destAddress: string;
 }

@@ -29,97 +29,129 @@ describe('Account', () => {
     isLocked: false,
   };
 
-  it('transferTo: should throw error when source is locked', () => {
-    const account = new Account({ ...accountProps, isLocked: true });
-    const destAccount = new Account(destAccountProps);
+  describe('transferTo', () => {
+    it('Should throw error when source is locked', () => {
+      const account = new Account({ ...accountProps, isLocked: true });
+      const destAccount = new Account(destAccountProps);
 
-    expect(() => account.transferTo(destAccount, '10')).toThrow(
-      AccountAlreadyLockedException,
-    );
-  });
-
-  it('transferTo: should throw error when destination is locked', () => {
-    const account = new Account(accountProps);
-    const destAccount = new Account({ ...destAccountProps, isLocked: true });
-
-    expect(() => account.transferTo(destAccount, '10')).toThrow(
-      NotFoundAccountException,
-    );
-  });
-
-  it('transferTo: should throw error when source and destination are the same', () => {
-    const account = new Account(accountProps);
-    const destAccount = new Account(accountProps);
-
-    expect(() => account.transferTo(destAccount, '10')).toThrow(
-      CannotTransferToSameAccountException,
-    );
-  });
-
-  it('transferTo: should throw error when amount is zero', () => {
-    const account = new Account(accountProps);
-    const destAccount = new Account(destAccountProps);
-    const zeroAmount = '0';
-
-    expect(() => account.transferTo(destAccount, zeroAmount)).toThrow(
-      ZeroAmountException,
-    );
-  });
-
-  it('transferTo: should throw error when account has insufficient funds', () => {
-    const account = new Account(accountProps);
-    const destAccount = new Account(destAccountProps);
-    const amount = '1000';
-
-    expect(() => account.transferTo(destAccount, amount)).toThrow(
-      InsufficientFundsException,
-    );
-  });
-
-  it('transferTo: should transfer to destination', () => {
-    const account = new Account(accountProps);
-    const destAccount = new Account(destAccountProps);
-    const amount = '10';
-
-    account.transferTo(destAccount, amount);
-
-    expect(account.balance).toBe('90');
-    expect(destAccount.balance).toBe('10');
-  });
-
-  it('lock: should throw error when locking an already locked account', () => {
-    const account = new Account({ ...accountProps, isLocked: true });
-    expect(() => account.lock()).toThrow(AccountAlreadyLockedException);
-  });
-
-  it('lock: should lock account', () => {
-    const account = new Account(accountProps);
-
-    account.lock();
-
-    expect(account.isLocked).toBe(true);
-    expect(account.lockedAt).toBeDefined();
-    expect(account.getUncommittedEvents()).toContainEqual(
-      new AccountLockedEvent(account.userId, account.id),
-    );
-  });
-
-  it('open: should throw error when opening an already opened account', () => {
-    const account = new Account(accountProps);
-    expect(() => account.open()).toThrow(AccountAlreadyOpenedException);
-  });
-
-  it('open: should open account', () => {
-    const account = new Account({
-      ...accountProps,
-      isLocked: true,
-      lockedAt: new Date(),
+      expect(() => account.transferTo(destAccount, '10')).toThrow(
+        AccountAlreadyLockedException,
+      );
     });
-    account.open();
-    expect(account.isLocked).toBe(false);
-    expect(account.lockedAt).toBeUndefined();
-    expect(account.getUncommittedEvents()).toContainEqual(
-      new AccountOpenedEvent(account.userId, account.id),
-    );
+
+    it('Should throw error when destination is locked', () => {
+      const account = new Account(accountProps);
+      const destAccount = new Account({ ...destAccountProps, isLocked: true });
+
+      expect(() => account.transferTo(destAccount, '10')).toThrow(
+        NotFoundAccountException,
+      );
+    });
+
+    it('Should throw error when source and destination are the same', () => {
+      const account = new Account(accountProps);
+      const destAccount = new Account(accountProps);
+
+      expect(() => account.transferTo(destAccount, '10')).toThrow(
+        CannotTransferToSameAccountException,
+      );
+    });
+
+    it('Should throw error when amount is zero', () => {
+      const account = new Account(accountProps);
+      const destAccount = new Account(destAccountProps);
+      const zeroAmount = '0';
+
+      expect(() => account.transferTo(destAccount, zeroAmount)).toThrow(
+        ZeroAmountException,
+      );
+    });
+
+    it('Should throw error when account has insufficient funds', () => {
+      const account = new Account(accountProps);
+      const destAccount = new Account(destAccountProps);
+      const amount = '1000';
+
+      expect(() => account.transferTo(destAccount, amount)).toThrow(
+        InsufficientFundsException,
+      );
+    });
+
+    it('Should transfer to destination', () => {
+      const account = new Account(accountProps);
+      const destAccount = new Account(destAccountProps);
+      const amount = '10';
+
+      account.transferTo(destAccount, amount);
+
+      expect(account.balance).toBe('90');
+      expect(destAccount.balance).toBe('10');
+    });
+  });
+
+  describe('Withdraw', () => {
+    it('Should throw error when account is locked', () => {
+      const account = new Account({ ...accountProps, isLocked: true });
+
+      expect(() => account.withdraw('10')).toThrow(
+        AccountAlreadyLockedException,
+      );
+    });
+
+    it('Should throw error when amount is zero', () => {
+      const account = new Account(accountProps);
+      const zeroAmount = '0';
+
+      expect(() => account.withdraw(zeroAmount)).toThrow(ZeroAmountException);
+    });
+
+    it('Should throw error when account has insufficient funds', () => {
+      const account = new Account(accountProps);
+      const amount = '1000';
+
+      expect(() => account.withdraw(amount)).toThrow(
+        InsufficientFundsException,
+      );
+    });
+  });
+
+  describe('Lock', () => {
+    it('Should throw error when locking an already locked account', () => {
+      const account = new Account({ ...accountProps, isLocked: true });
+      expect(() => account.lock()).toThrow(AccountAlreadyLockedException);
+    });
+
+    it('Should lock account', () => {
+      const account = new Account(accountProps);
+
+      account.lock();
+
+      expect(account.isLocked).toBe(true);
+      expect(account.lockedAt).toBeDefined();
+      expect(account.getUncommittedEvents()).toContainEqual(
+        new AccountLockedEvent(account.userId, account.id),
+      );
+    });
+  });
+
+  describe('Open', () => {
+    it('Should throw error when opening an already opened account', () => {
+      const account = new Account(accountProps);
+      expect(() => account.open()).toThrow(AccountAlreadyOpenedException);
+    });
+
+    it('Should open account', () => {
+      const account = new Account({
+        ...accountProps,
+        isLocked: true,
+        lockedAt: new Date(),
+      });
+      account.open();
+      expect(account.isLocked).toBe(false);
+      expect(account.lockedAt).toBeUndefined();
+      expect(account.getUncommittedEvents()).toContainEqual(
+        new AccountOpenedEvent(account.userId, account.id),
+      );
+    });
   });
 });

@@ -73,6 +73,25 @@ export class Account extends AggregateRoot implements AccountProperties {
     this.balance = new BigNumber(this.balance).minus(amount).toString();
   }
 
+  withdraw(amount: string): void {
+    // Check if source is locked
+    if (this.isLocked) {
+      throw new AccountAlreadyLockedException();
+    }
+
+    // Check if amount is zero
+    if (amount === '0') {
+      throw new ZeroAmountException();
+    }
+
+    // Check if account has enough funds
+    if (new BigNumber(this.balance).lt(amount)) {
+      throw new InsufficientFundsException();
+    }
+
+    this.balance = new BigNumber(this.balance).minus(amount).toString();
+  }
+
   /**
    * Lock account
    *
