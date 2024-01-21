@@ -100,7 +100,7 @@
 			]
 		},
 		{
-			"name": "user",
+			"name": "users",
 			"item": [
 				{
 					"name": "/user",
@@ -124,6 +124,24 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/users/2fa/generate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}{{api_tag}}/2fa/generate",
+							"host": [
+								"{{base_url}}{{api_tag}}"
+							],
+							"path": [
+								"2fa",
+								"generate"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -132,7 +150,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"pm.collectionVariables.set(\"api_tag\", \"/user\");"
+							"pm.collectionVariables.set(\"api_tag\", \"/users\");"
 						]
 					}
 				},
@@ -190,21 +208,34 @@
 				{
 					"name": "/accounts/{accountId}/transfer",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMUhBSjEwM0tKRTBFWFBUMDhOSjM2S0ZZTSIsImlzcyI6Im5lc3QtY3Fycy1jbGVhbi1hcmNoLWV4YW1wbGUuaW8iLCJhY2NvdW50SWQiOiIwMUhCWFNGSloyS01ZUEFEMDdBRUhKMFk0QiIsImlhdCI6MTcwNDU1OTc1OSwiZXhwIjoxNzA0NTU5OTM5fQ.Y6zEuCIMJqg20cBOyq0Qv7PdbV4LcHXtj_qRdBwiNUg",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "X-Account-Id",
-								"value": "{{transactional_account_id}}",
-								"type": "text"
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": \"1000000000000000000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
 							}
-						],
+						},
 						"url": {
-							"raw": "{{base_url}}{{api_tag}}/01hbxrpjvv761acfbah96v6zza/transfer",
+							"raw": "{{base_url}}{{api_tag}}/01HBXSFSSD88KVF78QM7STSN0E/transfer",
 							"host": [
 								"{{base_url}}{{api_tag}}"
 							],
 							"path": [
-								"01hbxrpjvv761acfbah96v6zza",
+								"01HBXSFSSD88KVF78QM7STSN0E",
 								"transfer"
 							]
 						}
@@ -212,18 +243,75 @@
 					"response": []
 				},
 				{
-					"name": "/accounts/2fa/generate",
+					"name": "/accounts/withdraw",
 					"request": {
-						"method": "GET",
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMUhBSjEwM0tKRTBFWFBUMDhOSjM2S0ZZTSIsImlzcyI6Im5lc3QtY3Fycy1jbGVhbi1hcmNoLWV4YW1wbGUuaW8iLCJhY2NvdW50SWQiOiIwMUhCWFNGSloyS01ZUEFEMDdBRUhKMFk0QiIsImlhdCI6MTcwNDU1OTc1OSwiZXhwIjoxNzA0NTU5OTM5fQ.Y6zEuCIMJqg20cBOyq0Qv7PdbV4LcHXtj_qRdBwiNUg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": \"100\",\n    \"destAddress\": \"01HBXSFSSD88KVF78QM7STSN0E\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}{{api_tag}}/2fa/generate",
+							"raw": "{{base_url}}{{api_tag}}/withdraw",
 							"host": [
 								"{{base_url}}{{api_tag}}"
 							],
 							"path": [
-								"2fa",
-								"generate"
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/accounts/{accountId}/otp-verify",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-2fa-token",
+								"value": "729033",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}{{api_tag}}/01HBXSFJZ2KMYPAD07AEHJ0Y4B/otp-verify",
+							"host": [
+								"{{base_url}}{{api_tag}}"
+							],
+							"path": [
+								"01HBXSFJZ2KMYPAD07AEHJ0Y4B",
+								"otp-verify"
 							]
 						}
 					},
@@ -315,11 +403,6 @@
 		{
 			"key": "privkey",
 			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "transactional_account_id",
-			"value": "01HBXSFJZ2KMYPAD07AEHJ0Y4B",
 			"type": "string"
 		}
 	]
