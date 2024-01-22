@@ -11,7 +11,7 @@ import {
 import { Timestamp } from '@common/database/entities';
 import { AccountRepository } from '../repositories';
 import { Wallet } from './wallet.entity';
-import { Transaction } from './transaction.entity';
+import { History } from './history.entity';
 
 @Entity({ tableName: 'accounts', customRepository: () => AccountRepository })
 export class Account extends Timestamp {
@@ -55,11 +55,11 @@ export class Account extends Timestamp {
   @ManyToOne(() => Wallet, { primary: true, fieldName: 'user_id' })
   wallet!: Wallet;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.sender)
-  senderTxs: Collection<Transaction> = new Collection<Transaction>(this);
+  @OneToMany(() => History, (history) => history.sender)
+  senderTxs: Collection<History> = new Collection<History>(this);
 
-  @OneToMany(() => Transaction, (transaction) => transaction.recipient)
-  recipientTxs: Collection<Transaction> = new Collection<Transaction>(this);
+  @OneToMany(() => History, (history) => history.recipient)
+  recipientTxs: Collection<History> = new Collection<History>(this);
 
   constructor(id: string, wallet: Wallet) {
     super();

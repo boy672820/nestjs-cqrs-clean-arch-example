@@ -55,6 +55,16 @@
           "primary": false,
           "nullable": false,
           "mappedType": "text"
+        },
+        "otp_secret": {
+          "name": "otp_secret",
+          "type": "varchar(16)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 16,
+          "mappedType": "string"
         }
       },
       "name": "users",
@@ -285,8 +295,8 @@
     },
     {
       "columns": {
-        "transaction_id": {
-          "name": "transaction_id",
+        "history_id": {
+          "name": "history_id",
           "type": "uuid",
           "unsigned": false,
           "autoincrement": false,
@@ -336,13 +346,13 @@
           "mappedType": "text"
         }
       },
-      "name": "transactions",
+      "name": "histories",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "transactions_pkey",
+          "keyName": "histories_pkey",
           "columnNames": [
-            "transaction_id"
+            "history_id"
           ],
           "composite": false,
           "primary": true,
@@ -351,12 +361,12 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "transactions_fromAccountId_foreign": {
-          "constraintName": "transactions_fromAccountId_foreign",
+        "histories_fromAccountId_foreign": {
+          "constraintName": "histories_fromAccountId_foreign",
           "columnNames": [
             "fromAccountId"
           ],
-          "localTableName": "public.transactions",
+          "localTableName": "public.histories",
           "referencedColumnNames": [
             "account_id",
             "user_id"
@@ -364,12 +374,12 @@
           "referencedTableName": "public.accounts",
           "updateRule": "cascade"
         },
-        "transactions_toAccountId_foreign": {
-          "constraintName": "transactions_toAccountId_foreign",
+        "histories_toAccountId_foreign": {
+          "constraintName": "histories_toAccountId_foreign",
           "columnNames": [
             "toAccountId"
           ],
-          "localTableName": "public.transactions",
+          "localTableName": "public.histories",
           "referencedColumnNames": [
             "account_id",
             "user_id"
