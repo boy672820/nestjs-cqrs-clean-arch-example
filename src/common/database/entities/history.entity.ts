@@ -21,8 +21,8 @@ export class History extends CreatedAt {
   readonly amount!: string;
 
   @ManyToOne(() => Account, { fieldName: 'fromAccountId' })
-  readonly sender!: Account;
+  readonly sender: Account;
 
   @ManyToOne(() => Account, { fieldName: 'toAccountId' })
-  readonly recipient!: Account;
+  readonly recipient: Account;
 }
