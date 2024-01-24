@@ -5,18 +5,13 @@ import { NotFoundAccountException } from '@common/errors';
 import { Transactional } from '@common/database/decorators';
 import { TransferCommand } from './transfer.command';
 import { InjectionToken } from '../../account.constants';
-import { HistoryFactory } from '../../domain';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
-import type { IHistoryRepository } from '../../domain/repositories/history.repository.interface';
 
 @CommandHandler(TransferCommand)
 export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
   constructor(
     @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly accountRepository: IAccountRepository,
-    @Inject(InjectionToken.HISTORY_REPOSITORY)
-    private readonly historyRepository: IHistoryRepository,
-    private readonly historyFactory: HistoryFactory,
   ) {
     super();
   }
@@ -42,21 +37,11 @@ export class TransferHandler extends CommandHandlerAbstract<TransferCommand> {
     }
 
     sourceAccount.transferTo(destAaccount, amount);
+    sourceAccount.commit();
 
     await Promise.all([
       this.accountRepository.update(sourceAccount),
       this.accountRepository.update(destAaccount),
     ]);
-
-    const history = this.historyFactory.create({
-      fromAccountId: sourceAccountId,
-      toAccountId: destAccountId,
-      amount,
-    });
-
-    await this.historyRepository.create(history);
-
-    history.created();
-    history.commit();
   }
 }

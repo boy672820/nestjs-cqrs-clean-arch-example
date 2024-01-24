@@ -5,7 +5,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AppConfigModule, AppConfigService } from '@config';
 import { Account } from '@common/database/entities';
 import { AccountController, WalletController } from './interface';
-import { AccountFactory, HistoryFactory, WalletFactory } from './domain';
+import { AccountFactory, WalletFactory } from './domain';
 import {
   AddAccountUnsafeHandler,
   CreateWalletHandler,
@@ -18,13 +18,12 @@ import {
 import {
   AccountRepository,
   AuthenticatorService,
-  HistoryRepository,
   UserRepository,
   WalletRepository,
 } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
-const Factories = [WalletFactory, AccountFactory, HistoryFactory];
+const Factories = [WalletFactory, AccountFactory];
 
 const CommandHandlers = [
   CreateWalletHandler,
@@ -48,10 +47,6 @@ const Repositories = [
   {
     provide: InjectionToken.USER_REPOSITORY,
     useClass: UserRepository,
-  },
-  {
-    provide: InjectionToken.HISTORY_REPOSITORY,
-    useClass: HistoryRepository,
   },
 ];
 
