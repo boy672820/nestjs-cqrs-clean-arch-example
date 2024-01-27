@@ -55,12 +55,12 @@ export class Account extends Timestamp {
   @ManyToOne(() => Wallet, { primary: true, fieldName: 'user_id' })
   wallet!: Wallet;
 
-  @OneToMany(() => History, (history) => history.fromAccount)
+  @OneToMany(() => History, (history) => history.account)
   histories: Collection<History> = new Collection<History>(this);
 
-  constructor(id: string, wallet: Wallet) {
+  constructor(wallet: Wallet, id: string) {
     super();
-    this.id = id;
     this.wallet = wallet;
+    this.id = id;
   }
 }

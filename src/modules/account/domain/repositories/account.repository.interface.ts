@@ -28,4 +28,17 @@ export interface IAccountRepository {
    * @param account - Account
    */
   update(account: Account): Promise<void>;
+
+  /**
+   * Create history
+   *
+   * @param fromAccount - From account
+   * @param toAccount - To account
+   * @param amount - Amount
+   */
+  createHistory: (
+    account: Account,
+    recipientAccount: Account,
+    amount: string,
+  ) => Promise<void>;
 }

@@ -9,6 +9,7 @@ import {
 import { Account } from './account';
 import { AccountLockedEvent } from './events/account-locked.event';
 import { AccountOpenedEvent } from './events/account-opened.event';
+import { AccountTransferredEvent } from './events/account-transferred.event';
 
 describe('Account', () => {
   const accountProps = {
@@ -86,6 +87,9 @@ describe('Account', () => {
 
       expect(account.balance).toBe('90');
       expect(destAccount.balance).toBe('10');
+      expect(account.getUncommittedEvents()).toContainEqual(
+        new AccountTransferredEvent(account.id, destAccount.id, amount),
+      );
     });
   });
 

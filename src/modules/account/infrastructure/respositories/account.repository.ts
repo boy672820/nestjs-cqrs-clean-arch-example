@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Account as AccountEntity } from '@common/database/entities';
+import {
+  Account as AccountEntity,
+  History as HistoryEntity,
+} from '@common/database/entities';
+import { HistoryType } from '@common/database/enum';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { wrap } from '@mikro-orm/core';
 import { Account } from '../../domain/account';
 import { AccountFactory } from '../../domain';
 import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
+import { ulid } from 'ulid';
 
 @Injectable()
 export class AccountRepository implements IAccountRepository {
@@ -42,6 +47,42 @@ export class AccountRepository implements IAccountRepository {
     wrap(accountRef).assign(account);
 
     await this.em.persistAndFlush(accountRef);
+  }
+
+  async createHistory(
+    account: Account,
+    recipientAccount: Account,
+    amount: string,
+  ): Promise<void> {
+    const accountRef = this.em.getReference(AccountEntity, [
+      account.id,
+      account.userId,
+    ]);
+    const recipientAccountRef = this.em.getReference(AccountEntity, [
+      recipientAccount.id,
+      recipientAccount.userId,
+    ]);
+
+    const withdrawal = this.em.create(HistoryEntity, {
+      id: ulid(),
+      account: accountRef,
+      recipientAccountId: recipientAccount.id,
+      recipientUserId: recipientAccount.userId,
+      amount,
+      type: HistoryType.Withdrawal,
+      createdAt: new Date(),
+    });
+    const deposit = this.em.create(HistoryEntity, {
+      id: ulid(),
+      account: recipientAccountRef,
+      recipientAccountId: account.id,
+      recipientUserId: account.userId,
+      amount,
+      type: HistoryType.Deposit,
+      createdAt: new Date(),
+    });
+
+    await this.em.persistAndFlush([withdrawal, deposit]);
   }
 
   /**

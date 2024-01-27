@@ -1,6 +1,6 @@
-import { IEvent } from '@nestjs/cqrs';
+import { ICommand } from '@nestjs/cqrs';
 
-export class AccountTransferredEvent implements IEvent {
+export class CreateHistoryCommand implements ICommand {
   constructor(
     public readonly fromAccountId: string,
     public readonly toAccountId: string,

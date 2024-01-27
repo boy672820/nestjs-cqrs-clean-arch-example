@@ -10,6 +10,7 @@ import {
 import { AccountLockedEvent } from './events/account-locked.event';
 import { AccountOpenedEvent } from './events/account-opened.event';
 import BigNumber from 'bignumber.js';
+import { AccountTransferredEvent } from './events/account-transferred.event';
 
 export interface AccountProperties {
   id: string;
@@ -71,6 +72,7 @@ export class Account extends AggregateRoot implements AccountProperties {
       .plus(amount)
       .toString();
     this.balance = new BigNumber(this.balance).minus(amount).toString();
+    this.apply(new AccountTransferredEvent(this.id, destAccount.id, amount));
   }
 
   withdraw(amount: string): void {

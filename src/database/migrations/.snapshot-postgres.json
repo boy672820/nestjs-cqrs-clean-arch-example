@@ -295,26 +295,32 @@
     },
     {
       "columns": {
+        "from_account_id": {
+          "name": "from_account_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "history_id": {
           "name": "history_id",
-          "type": "uuid",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "default": "uuid_generate_v4()",
-          "mappedType": "uuid"
+          "mappedType": "text"
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamptz(0)",
+        "to_account_id": {
+          "name": "to_account_id",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
-          "default": "'now'",
-          "mappedType": "datetime"
+          "mappedType": "text"
         },
         "amount": {
           "name": "amount",
@@ -327,23 +333,44 @@
           "scale": 0,
           "mappedType": "decimal"
         },
-        "fromAccountId": {
-          "name": "fromAccountId",
-          "type": "text",
+        "from_account_address": {
+          "name": "from_account_address",
+          "type": "varchar(42)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "text"
+          "length": 42,
+          "mappedType": "string"
         },
-        "toAccountId": {
-          "name": "toAccountId",
-          "type": "text",
+        "to_account_address": {
+          "name": "to_account_address",
+          "type": "varchar(42)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "text"
+          "length": 42,
+          "mappedType": "string"
+        },
+        "history_type": {
+          "name": "history_type",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "histories",
@@ -352,7 +379,7 @@
         {
           "keyName": "histories_pkey",
           "columnNames": [
-            "history_id"
+            "from_account_id"
           ],
           "composite": false,
           "primary": true,
@@ -361,23 +388,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "histories_fromAccountId_foreign": {
-          "constraintName": "histories_fromAccountId_foreign",
+        "histories_from_account_id_foreign": {
+          "constraintName": "histories_from_account_id_foreign",
           "columnNames": [
-            "fromAccountId"
-          ],
-          "localTableName": "public.histories",
-          "referencedColumnNames": [
-            "account_id",
-            "user_id"
-          ],
-          "referencedTableName": "public.accounts",
-          "updateRule": "cascade"
-        },
-        "histories_toAccountId_foreign": {
-          "constraintName": "histories_toAccountId_foreign",
-          "columnNames": [
-            "toAccountId"
+            "from_account_id"
           ],
           "localTableName": "public.histories",
           "referencedColumnNames": [

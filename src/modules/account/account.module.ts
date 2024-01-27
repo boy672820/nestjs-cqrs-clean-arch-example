@@ -7,7 +7,9 @@ import { Account } from '@common/database/entities';
 import { AccountController, WalletController } from './interface';
 import { AccountFactory, WalletFactory } from './domain';
 import {
+  AccountSaga,
   AddAccountUnsafeHandler,
+  CreateHistoryHandler,
   CreateWalletHandler,
   LockAccountHandler,
   OpenAccountHandler,
@@ -33,6 +35,7 @@ const CommandHandlers = [
   TransferHandler,
   WithdrawHandler,
   Verify2faTokenHandler,
+  CreateHistoryHandler,
 ];
 
 const Repositories = [
@@ -68,7 +71,13 @@ const Adapters = [
       inject: [AppConfigService],
     }),
   ],
-  providers: [...Factories, ...CommandHandlers, ...Repositories, ...Adapters],
+  providers: [
+    ...Factories,
+    ...CommandHandlers,
+    ...Repositories,
+    ...Adapters,
+    AccountSaga,
+  ],
   controllers: [WalletController, AccountController],
 })
 export class AccountModule {}

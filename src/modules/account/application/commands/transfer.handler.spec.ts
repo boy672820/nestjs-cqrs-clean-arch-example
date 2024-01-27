@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { TransferHandler } from './transfer.handler';
 import { InjectionToken } from '../../account.constants';
-import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 import { MockProxy, mock } from 'jest-mock-extended';
 import { Account } from '../../domain/account';
+import type { IAccountRepository } from '../../domain/repositories/account.repository.interface';
 
 describe('TransferHandler', () => {
   let handler: TransferHandler;
