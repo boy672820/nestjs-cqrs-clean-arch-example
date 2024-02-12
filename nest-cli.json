@@ -15,6 +15,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/auth/tsconfig.lib.json"
       }
+    },
+    "ethers": {
+      "type": "library",
+      "root": "libs/ethers",
+      "entryFile": "index",
+      "sourceRoot": "libs/ethers/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ethers/tsconfig.lib.json"
+      }
     }
   }
 }

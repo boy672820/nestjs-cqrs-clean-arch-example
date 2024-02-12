@@ -4,6 +4,7 @@ import { AuthModule } from '@libs/auth';
 import { AuthBasicService, DatabaseModule } from './database';
 import { validate } from './env.validator';
 import { User } from '@common/database/entities';
+import { EthersModule } from '@libs/ethers';
 
 @Module({
   imports: [
@@ -19,6 +20,11 @@ import { User } from '@common/database/entities';
         DatabaseModule.forRoot(),
         DatabaseModule.forFeature({ entities: [User] }),
       ],
+    }),
+    EthersModule.forRoot({
+      network: 'sepolia',
+      alchemy: 'https://eth-mainnet.alchemyapi.io/v2/your-api-key',
+      phrase: 'your-12-word-phrase',
     }),
   ],
 })

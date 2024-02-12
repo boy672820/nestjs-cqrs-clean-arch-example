@@ -99,7 +99,8 @@
       "^@core$": "<rootDir>/src/core",
       "^@core/(.*)$": "<rootDir>/src/core/$1",
       "^@libs/auth$": "<rootDir>/libs/auth/src",
-      "^@libs/auth/(.*)$": "<rootDir>/libs/auth/src/$1"
+      "^@libs/auth/(.*)$": "<rootDir>/libs/auth/src/$1",
+      "^@libs/ethers(|/.*)$": "<rootDir>/libs/ethers/src/$1"
     }
   },
   "mikro-orm": {

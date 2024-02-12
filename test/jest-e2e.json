@@ -12,6 +12,8 @@
   },
   "moduleNameMapper": {
     "@app/auth/(.*)": "<rootDir>/../libs/auth/src/$1",
-    "@app/auth": "<rootDir>/../libs/auth/src"
+    "@app/auth": "<rootDir>/../libs/auth/src",
+    "@libs/ethers/(.*)": "<rootDir>/../libs/ethers/src/$1",
+    "@libs/ethers": "<rootDir>/../libs/ethers/src"
   }
 }

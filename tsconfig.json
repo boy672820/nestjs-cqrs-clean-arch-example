@@ -41,6 +41,12 @@
       ],
       "@libs/auth/*": [
         "libs/auth/src/*"
+      ],
+      "@libs/ethers": [
+        "libs/ethers/src"
+      ],
+      "@libs/ethers/*": [
+        "libs/ethers/src/*"
       ]
     }
   }
