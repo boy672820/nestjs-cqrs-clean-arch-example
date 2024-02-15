@@ -15,3 +15,11 @@ export interface EthersModuleRootOptions
     SignerProviderOptions {
   network: Network;
 }
+
+export interface EthersModuleAsyncOptions {
+  useFactory: (
+    ...args: any[]
+  ) => Promise<EthersModuleRootOptions> | EthersModuleRootOptions;
+  inject?: any[];
+  imports?: any[];
+}

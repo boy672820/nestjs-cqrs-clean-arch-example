@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AppConfigModule, AppConfigService } from '@config';
 import { Account } from '@common/database/entities';
+import { EthersModule } from '@libs/ethers';
 import { AccountController, WalletController } from './interface';
 import { AccountFactory, WalletFactory } from './domain';
 import {
@@ -19,9 +20,10 @@ import {
 } from './application';
 import {
   AccountRepository,
-  AuthenticatorService,
   UserRepository,
   WalletRepository,
+  AuthenticatorService,
+  ContractService,
 } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
@@ -55,6 +57,7 @@ const Repositories = [
 
 const Adapters = [
   { provide: InjectionToken.AUTHENTICATOR, useClass: AuthenticatorService },
+  { provide: InjectionToken.CONTRACT_SERVICE, useClass: ContractService },
 ];
 
 @Module({
@@ -70,6 +73,7 @@ const Adapters = [
       }),
       inject: [AppConfigService],
     }),
+    EthersModule.forFeature(),
   ],
   providers: [
     ...Factories,

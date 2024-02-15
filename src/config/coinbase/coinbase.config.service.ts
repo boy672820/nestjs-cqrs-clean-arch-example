@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-const prefix = (key: string) => `wallet.${key}`;
+const prefix = (key: string) => `coinbase.${key}`;
 
 @Injectable()
 export class CoinbaseConfigService {
@@ -12,5 +12,11 @@ export class CoinbaseConfigService {
   }
   get password(): string {
     return this.config.get(prefix('password'));
+  }
+  get network(): 'mainnet' | 'sepolia' {
+    return this.config.get(prefix('network'));
+  }
+  get alchemyKey(): string {
+    return this.config.get(prefix('alchemyKey'));
   }
 }

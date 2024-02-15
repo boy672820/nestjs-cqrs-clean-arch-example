@@ -5,6 +5,7 @@ import { AuthBasicService, DatabaseModule } from './database';
 import { validate } from './env.validator';
 import { User } from '@common/database/entities';
 import { EthersModule } from '@libs/ethers';
+import { CoinbaseConfigModule, CoinbaseConfigService } from '../config';
 
 @Module({
   imports: [
@@ -21,10 +22,15 @@ import { EthersModule } from '@libs/ethers';
         DatabaseModule.forFeature({ entities: [User] }),
       ],
     }),
-    EthersModule.forRoot({
-      network: 'sepolia',
-      alchemy: 'https://eth-mainnet.alchemyapi.io/v2/your-api-key',
-      phrase: 'your-12-word-phrase',
+    EthersModule.forRootAsync({
+      useFactory: (config: CoinbaseConfigService) => ({
+        network: config.network,
+        alchemy: config.alchemyKey,
+        phrase: config.phrase,
+        password: config.password,
+      }),
+      inject: [CoinbaseConfigService],
+      imports: [CoinbaseConfigModule],
     }),
   ],
 })

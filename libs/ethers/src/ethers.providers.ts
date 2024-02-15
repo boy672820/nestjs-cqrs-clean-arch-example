@@ -1,26 +1,54 @@
-import { AlchemyProvider, HDNodeWallet, Mnemonic, Provider } from 'ethers';
+import { AlchemyProvider, HDNodeWallet, Mnemonic } from 'ethers';
 import { InjectionTokens } from './ethers.constants';
 import type {
   AlchemyProviderOptions,
   SignerProviderOptions,
 } from './ethers.interface';
 
+export const createAlchemyProviderFactory = async (
+  options: AlchemyProviderOptions,
+) => {
+  const alchemy = new AlchemyProvider(options.network, options.alchemy);
+  await alchemy.ready;
+  return alchemy;
+};
+
+export const createSignerFactory =
+  (options: SignerProviderOptions) => async (provider: AlchemyProvider) => {
+    const mnemonic = Mnemonic.fromPhrase(options.phrase, options.password);
+    const hdnode = HDNodeWallet.fromMnemonic(mnemonic).connect(provider);
+    const signer = hdnode.deriveChild(0);
+    return signer;
+  };
+
 export const createAlchemyProvider = (options: AlchemyProviderOptions) => ({
-  provide: InjectionTokens.ALCHEMY,
+  provide: InjectionTokens.ALCHEMY_PROVIDER,
   useFactory: async () => {
-    const alchemy = new AlchemyProvider(options.network, options.alchemy);
-    await alchemy.ready;
-    return alchemy;
+    return await createAlchemyProviderFactory(options);
   },
 });
 
 export const createSignerProvider = (options: SignerProviderOptions) => ({
   provide: InjectionTokens.SIGNER,
-  useFactory: async (provider: Provider) => {
-    const mnemonic = Mnemonic.fromPhrase(options.phrase, options.password);
-    const hdnode = HDNodeWallet.fromMnemonic(mnemonic).connect(provider);
-    const signer = hdnode.deriveChild(0);
-    return signer;
+  useFactory: async (alchemyProvider: AlchemyProvider) => {
+    return await createSignerFactory(options)(alchemyProvider);
   },
-  inject: [InjectionTokens.ALCHEMY],
+  inject: [InjectionTokens.ALCHEMY_PROVIDER],
+});
+
+export const createAlchemyProviderAsync = () => ({
+  provide: InjectionTokens.ALCHEMY_PROVIDER,
+  useFactory: createAlchemyProviderFactory,
+  inject: [InjectionTokens.ASYNC_OPTIONS],
+});
+
+export const createSignerAsync = () => ({
+  provide: InjectionTokens.SIGNER,
+  useFactory: async (
+    options: SignerProviderOptions,
+    alchemyProvider: AlchemyProvider,
+  ) => {
+    return await createSignerFactory(options)(alchemyProvider);
+  },
+  inject: [InjectionTokens.ASYNC_OPTIONS, InjectionTokens.ALCHEMY_PROVIDER],
 });

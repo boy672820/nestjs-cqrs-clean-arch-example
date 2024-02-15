@@ -1,4 +1,5 @@
 export enum InjectionTokens {
-  ALCHEMY = 'ALCHEMY',
+  ALCHEMY_PROVIDER = 'ALCHEMY_PROVIDER',
   SIGNER = 'SIGNER',
+  ASYNC_OPTIONS = 'ASYNC_OPTIONS',
 }
