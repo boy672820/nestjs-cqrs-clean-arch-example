@@ -43,6 +43,12 @@ import { Public, type UserPayload } from '@libs/auth';
 export class AccountController {
   constructor(private readonly commandBus: CommandBus) {}
 
+  @Public()
+  @Post('test')
+  test() {
+    return 'test';
+  }
+
   @ApiOperation({
     summary: 'Withdraw',
     description:
