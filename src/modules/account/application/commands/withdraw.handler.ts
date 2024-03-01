@@ -24,6 +24,10 @@ export class WithdrawHandler extends CommandHandlerAbstract<WithdrawCommand> {
 
     account.withdraw(amount);
 
-    console.log(this.contractService.getAddress());
+    console.log(
+      await this.contractService.getBalance(
+        '0xC685F51196B86Ba2Ae71dac3E6D8fFF0C43F9ce3',
+      ),
+    );
   }
 }

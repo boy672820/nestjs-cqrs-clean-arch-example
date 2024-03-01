@@ -1,2 +1,2 @@
 export * from './ethers.module';
-export * from './ethers.service';
+export { TokenContract } from './token.contract';

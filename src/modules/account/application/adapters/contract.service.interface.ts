@@ -1,4 +1,4 @@
 export interface IContractService {
-  getAddress(): string;
+  getBalance(eoa: string): Promise<bigint>;
   transfer(eoa: string, amount: string): Promise<void>;
 }

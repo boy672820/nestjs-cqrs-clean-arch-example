@@ -10,9 +10,15 @@ export interface SignerProviderOptions {
   password?: string;
 }
 
+export interface ContractProviderOptions {
+  address: string;
+  abi: Array<Record<string, string | boolean>>;
+}
+
 export interface EthersModuleRootOptions
   extends AlchemyProviderOptions,
-    SignerProviderOptions {
+    SignerProviderOptions,
+    ContractProviderOptions {
   network: Network;
 }
 

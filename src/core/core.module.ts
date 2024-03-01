@@ -5,7 +5,12 @@ import { AuthBasicService, DatabaseModule } from './database';
 import { validate } from './env.validator';
 import { User } from '@common/database/entities';
 import { EthersModule } from '@libs/ethers';
-import { CoinbaseConfigModule, CoinbaseConfigService } from '../config';
+import {
+  CoinbaseConfigModule,
+  CoinbaseConfigService,
+  ContractConfigModule,
+  ContractConfigService,
+} from '../config';
 
 @Module({
   imports: [
@@ -23,14 +28,19 @@ import { CoinbaseConfigModule, CoinbaseConfigService } from '../config';
       ],
     }),
     EthersModule.forRootAsync({
-      useFactory: (config: CoinbaseConfigService) => ({
-        network: config.network,
-        alchemy: config.alchemyKey,
-        phrase: config.phrase,
-        password: config.password,
+      useFactory: (
+        coinbaseConfig: CoinbaseConfigService,
+        contractConfig: ContractConfigService,
+      ) => ({
+        network: coinbaseConfig.network,
+        alchemy: coinbaseConfig.alchemyKey,
+        phrase: coinbaseConfig.phrase,
+        password: coinbaseConfig.password,
+        address: contractConfig.address,
+        abi: contractConfig.abi,
       }),
-      inject: [CoinbaseConfigService],
-      imports: [CoinbaseConfigModule],
+      inject: [CoinbaseConfigService, ContractConfigService],
+      imports: [CoinbaseConfigModule, ContractConfigModule],
     }),
   ],
 })

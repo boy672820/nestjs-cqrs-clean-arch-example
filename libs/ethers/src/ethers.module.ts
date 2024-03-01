@@ -6,11 +6,13 @@ import type {
 import {
   createAlchemyProvider,
   createAlchemyProviderAsync,
+  createContractAsync,
+  createContractProvider,
   createSignerAsync,
   createSignerProvider,
 } from './ethers.providers';
 import { InjectionTokens } from './ethers.constants';
-import { EthersService } from './ethers.service';
+import { TokenContract, TokenContractImpl } from './token.contract';
 
 @Module({})
 export class EthersModule {
@@ -20,8 +22,9 @@ export class EthersModule {
       providers: [
         createAlchemyProvider(options),
         createSignerProvider(options),
+        createContractProvider(options),
       ],
-      exports: [InjectionTokens.SIGNER],
+      exports: [InjectionTokens.BASE_CONTRACT],
       global: true,
     };
   }
@@ -36,6 +39,7 @@ export class EthersModule {
       providers: [
         createAlchemyProviderAsync(),
         createSignerAsync(),
+        createContractAsync(),
         {
           provide: InjectionTokens.ASYNC_OPTIONS,
           useFactory,
@@ -43,7 +47,7 @@ export class EthersModule {
         },
       ],
       imports,
-      exports: [InjectionTokens.SIGNER],
+      exports: [InjectionTokens.BASE_CONTRACT],
       global: true,
     };
   }
@@ -51,8 +55,13 @@ export class EthersModule {
   static forFeature(): DynamicModule {
     return {
       module: EthersModule,
-      providers: [EthersService],
-      exports: [EthersService],
+      providers: [
+        {
+          provide: TokenContract,
+          useClass: TokenContractImpl,
+        },
+      ],
+      exports: [TokenContract],
     };
   }
 }
