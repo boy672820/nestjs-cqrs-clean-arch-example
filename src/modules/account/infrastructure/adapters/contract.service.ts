@@ -11,7 +11,8 @@ export class ContractService implements IContractService {
     return balance;
   }
 
-  async transfer(eoa: string, amount: string): Promise<void> {
-    await Promise.resolve();
+  async transfer(eoa: string, amount: bigint): Promise<any> {
+    const tx = await this.tokenContract.transfer(eoa, BigInt(amount));
+    return tx;
   }
 }

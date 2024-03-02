@@ -12,7 +12,9 @@ import {
   createSignerProvider,
 } from './ethers.providers';
 import { InjectionTokens } from './ethers.constants';
-import { TokenContract, TokenContractImpl } from './token.contract';
+import { TokenContract } from './token.contract.abstract';
+import { TokenContractImpl } from './token.contract';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({})
 export class EthersModule {
@@ -55,6 +57,7 @@ export class EthersModule {
   static forFeature(): DynamicModule {
     return {
       module: EthersModule,
+      imports: [EventEmitterModule.forRoot()],
       providers: [
         {
           provide: TokenContract,
