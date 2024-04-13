@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TokenContract } from '@libs/ethers';
+import { parseEther } from 'ethers';
 import type { IContractService } from '../../application/adapters/contract.service.interface';
 
 @Injectable()
@@ -11,8 +12,8 @@ export class ContractService implements IContractService {
     return balance;
   }
 
-  async transfer(eoa: string, amount: bigint): Promise<any> {
-    const tx = await this.tokenContract.transfer(eoa, BigInt(amount));
+  async transfer(eoa: string, amount: string): Promise<any> {
+    const tx = await this.tokenContract.transfer(eoa, parseEther(amount));
     return tx;
   }
 }

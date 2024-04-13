@@ -14,4 +14,8 @@ export class AppConfigService {
   get jwtSecret(): string {
     return this.config.get(prefix('jwtSecret'));
   }
+
+  get jwtExpiresIn(): string {
+    return this.config.get(prefix('jwtExpiresIn'));
+  }
 }

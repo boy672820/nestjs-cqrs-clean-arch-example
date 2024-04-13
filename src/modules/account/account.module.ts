@@ -69,7 +69,7 @@ const Adapters = [
       imports: [AppConfigModule],
       useFactory: (config: AppConfigService) => ({
         secret: config.jwtSecret,
-        signOptions: { expiresIn: '3m' },
+        signOptions: { expiresIn: config.jwtExpiresIn },
       }),
       inject: [AppConfigService],
     }),

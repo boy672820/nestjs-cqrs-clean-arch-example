@@ -3,8 +3,5 @@ export abstract class TokenContract {
   abstract transfer(
     to: string,
     amount: bigint,
-  ): Promise<{
-    txHash: string;
-    nonce: number;
-  }>;
+  ): Promise<{ hash: string; nonce: number }>;
 }

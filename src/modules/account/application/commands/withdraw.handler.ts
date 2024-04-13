@@ -24,11 +24,6 @@ export class WithdrawHandler extends CommandHandlerAbstract<WithdrawCommand> {
 
     account.withdraw(amount);
 
-    console.log(
-      await this.contractService.transfer(
-        '0x7d189Bf04dc44fE21679e39344129F7feF7887b1',
-        BigInt(amount),
-      ),
-    );
+    const tx = await this.contractService.transfer(destAddress, amount);
   }
 }

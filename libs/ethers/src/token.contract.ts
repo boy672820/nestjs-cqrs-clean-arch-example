@@ -3,10 +3,12 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   BaseContract,
   BaseContractMethod,
+  ContractEventPayload,
   ContractTransactionResponse,
 } from 'ethers';
 import { InjectionTokens } from './ethers.constants';
 import { TokenContract } from './token.contract.abstract';
+import { TokenTransferredEvent } from './events';
 
 export class TokenContractImpl
   implements TokenContract, OnApplicationBootstrap
@@ -18,14 +20,20 @@ export class TokenContractImpl
   ) {}
 
   onApplicationBootstrap() {
-    this.contract.on('Transfer', (from, to, value, tx) => {
-      this.eventEmitter.emit('token.transfer', {
-        from,
-        to,
-        value,
-        tx,
-      });
-    });
+    // 트랜잭션 대기 중인 이벤트를 구독합니다.
+    this.contract.on(
+      'Transfer',
+      async (from, to, value, payload: ContractEventPayload) => {
+        const tx = await payload.getTransaction();
+        this.eventEmitter.emit(
+          'token.transferred',
+          new TokenTransferredEvent(from, to, value, tx.hash, tx.nonce),
+        );
+
+        const receipt = await tx.wait();
+        console.log(receipt);
+      },
+    );
   }
 
   async balanceOf(address: string): Promise<bigint> {
@@ -38,12 +46,15 @@ export class TokenContractImpl
   async transfer(
     to: string,
     amount: bigint,
-  ): Promise<{ txHash: string; nonce: number }> {
+  ): Promise<{
+    hash: string;
+    nonce: number;
+  }> {
     const transfer =
       this.contract.getFunction<
         BaseContractMethod<[string, bigint], ContractTransactionResponse>
       >('transfer');
     const tx = await transfer(to, amount);
-    return { txHash: tx.hash, nonce: tx.nonce };
+    return { hash: tx.hash, nonce: tx.nonce };
   }
 }

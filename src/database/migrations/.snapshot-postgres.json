@@ -6,6 +6,161 @@
   "tables": [
     {
       "columns": {
+        "hash": {
+          "name": "hash",
+          "type": "varchar(66)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 66,
+          "mappedType": "string"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now",
+          "mappedType": "datetime"
+        },
+        "nonce": {
+          "name": "nonce",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "from": {
+          "name": "from",
+          "type": "varchar(42)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 42,
+          "mappedType": "string"
+        },
+        "to": {
+          "name": "to",
+          "type": "varchar(42)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 42,
+          "mappedType": "string"
+        },
+        "block_number": {
+          "name": "block_number",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "block_hash": {
+          "name": "block_hash",
+          "type": "varchar(66)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 66,
+          "mappedType": "string"
+        },
+        "index": {
+          "name": "index",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "gas_price": {
+          "name": "gas_price",
+          "type": "bigint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "bigint"
+        },
+        "gas_limit": {
+          "name": "gas_limit",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "gas_used": {
+          "name": "gas_used",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "fee": {
+          "name": "fee",
+          "type": "numeric(38,0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "precision": 38,
+          "scale": 0,
+          "mappedType": "decimal"
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "smallint"
+        }
+      },
+      "name": "transactions",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "transactions_pkey",
+          "columnNames": [
+            "hash"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
         "user_id": {
           "name": "user_id",
           "type": "uuid",
@@ -295,15 +450,6 @@
     },
     {
       "columns": {
-        "from_account_id": {
-          "name": "from_account_id",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
         "history_id": {
           "name": "history_id",
           "type": "text",
@@ -313,8 +459,28 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "to_account_id": {
-          "name": "to_account_id",
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "'now'",
+          "mappedType": "datetime"
+        },
+        "recipient_user_id": {
+          "name": "recipient_user_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "recipient_account_id": {
+          "name": "recipient_account_id",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -333,26 +499,6 @@
           "scale": 0,
           "mappedType": "decimal"
         },
-        "from_account_address": {
-          "name": "from_account_address",
-          "type": "varchar(42)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 42,
-          "mappedType": "string"
-        },
-        "to_account_address": {
-          "name": "to_account_address",
-          "type": "varchar(42)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 42,
-          "mappedType": "string"
-        },
         "history_type": {
           "name": "history_type",
           "type": "varchar(255)",
@@ -362,15 +508,23 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamptz(0)",
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 6,
-          "mappedType": "datetime"
+          "mappedType": "text"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
         }
       },
       "name": "histories",
@@ -379,7 +533,7 @@
         {
           "keyName": "histories_pkey",
           "columnNames": [
-            "from_account_id"
+            "history_id"
           ],
           "composite": false,
           "primary": true,
@@ -388,10 +542,11 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "histories_from_account_id_foreign": {
-          "constraintName": "histories_from_account_id_foreign",
+        "histories_account_id_user_id_foreign": {
+          "constraintName": "histories_account_id_user_id_foreign",
           "columnNames": [
-            "from_account_id"
+            "account_id",
+            "user_id"
           ],
           "localTableName": "public.histories",
           "referencedColumnNames": [

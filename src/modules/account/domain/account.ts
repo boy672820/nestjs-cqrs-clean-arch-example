@@ -43,27 +43,18 @@ export class Account extends AggregateRoot implements AccountProperties {
    * @param amount Amount to transfer
    */
   transferTo(destAccount: Account, amount: string): void {
-    // Check if source is locked
     if (this.isLocked) {
       throw new AccountAlreadyLockedException();
     }
-
-    // Check if destionation is locked
     if (destAccount.isLocked) {
       throw new NotFoundAccountException();
     }
-
-    // Check if source and destination are the same
     if (this.id === destAccount.id) {
       throw new CannotTransferToSameAccountException();
     }
-
-    // Check if amount is zero
     if (amount === '0') {
       throw new ZeroAmountException();
     }
-
-    // Check if account has enough funds
     if (new BigNumber(this.balance).lt(amount)) {
       throw new InsufficientFundsException();
     }
@@ -76,17 +67,12 @@ export class Account extends AggregateRoot implements AccountProperties {
   }
 
   withdraw(amount: string): void {
-    // Check if source is locked
     if (this.isLocked) {
       throw new AccountAlreadyLockedException();
     }
-
-    // Check if amount is zero
     if (amount === '0') {
       throw new ZeroAmountException();
     }
-
-    // Check if account has enough funds
     if (new BigNumber(this.balance).lt(amount)) {
       throw new InsufficientFundsException();
     }
