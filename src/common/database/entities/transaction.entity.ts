@@ -17,8 +17,8 @@ export class Transaction extends Timestamp {
   @Property({ type: 'char', length: 42, name: 'from', nullable: false })
   from!: string;
 
-  @Property({ type: 'char', length: 42, name: 'to', nullable: true })
-  to!: string | null;
+  @Property({ type: 'char', length: 42, name: 'to', nullable: false })
+  to!: string;
 
   @Property({ type: 'int', name: 'block_number', nullable: true })
   blockNumber!: number | null;
@@ -33,7 +33,7 @@ export class Transaction extends Timestamp {
   gasPrice!: bigint;
 
   @Property({ type: 'int', name: 'gas_limit', nullable: false })
-  gasLimit!: number;
+  gasLimit!: bigint;
 
   @Property({ type: 'int', name: 'gas_used', nullable: true })
   gasUsed!: number | null;

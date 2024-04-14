@@ -6,7 +6,7 @@ import { AppConfigModule, AppConfigService } from '@config';
 import { Account } from '@common/database/entities';
 import { EthersModule } from '@libs/ethers';
 import { AccountController, WalletController } from './interface';
-import { AccountFactory, WalletFactory } from './domain';
+import { AccountFactory, TransactionFactory, WalletFactory } from './domain';
 import {
   AccountSaga,
   AddAccountUnsafeHandler,
@@ -24,10 +24,11 @@ import {
   WalletRepository,
   AuthenticatorService,
   ContractService,
+  TransactionRepository,
 } from './infrastructure';
 import { InjectionToken } from './account.constants';
 
-const Factories = [WalletFactory, AccountFactory];
+const Factories = [WalletFactory, AccountFactory, TransactionFactory];
 
 const CommandHandlers = [
   CreateWalletHandler,
@@ -52,6 +53,10 @@ const Repositories = [
   {
     provide: InjectionToken.USER_REPOSITORY,
     useClass: UserRepository,
+  },
+  {
+    provide: InjectionToken.TRANSACTION_REPOSITORY,
+    useClass: TransactionRepository,
   },
 ];
 

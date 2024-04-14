@@ -47,6 +47,15 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "smallint"
+        },
         "from": {
           "name": "from",
           "type": "varchar(42)",
@@ -63,7 +72,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "length": 42,
           "mappedType": "string"
         },
@@ -132,15 +141,6 @@
           "precision": 38,
           "scale": 0,
           "mappedType": "decimal"
-        },
-        "status": {
-          "name": "status",
-          "type": "smallint",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "smallint"
         }
       },
       "name": "transactions",

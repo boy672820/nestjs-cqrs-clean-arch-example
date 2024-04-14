@@ -29,9 +29,7 @@ export class TokenContractImpl
           'token.transferred',
           new TokenTransferredEvent(from, to, value, tx.hash, tx.nonce),
         );
-
         const receipt = await tx.wait();
-        console.log(receipt);
       },
     );
   }
@@ -43,18 +41,19 @@ export class TokenContractImpl
     return balance;
   }
 
-  async transfer(
-    to: string,
-    amount: bigint,
-  ): Promise<{
-    hash: string;
-    nonce: number;
-  }> {
+  async transfer(to: string, amount: bigint) {
     const transfer =
       this.contract.getFunction<
         BaseContractMethod<[string, bigint], ContractTransactionResponse>
       >('transfer');
     const tx = await transfer(to, amount);
-    return { hash: tx.hash, nonce: tx.nonce };
+
+    return {
+      hash: tx.hash,
+      nonce: tx.nonce,
+      index: tx.index,
+      gasPrice: tx.gasPrice,
+      gasLimit: tx.gasLimit,
+    };
   }
 }
