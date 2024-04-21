@@ -40,13 +40,7 @@ export class WithdrawHandler extends CommandHandlerAbstract<WithdrawCommand> {
       status: TransactionStatus.Pending,
       from: account.accountAddress,
       to: destAddress,
-      blockNumber: null,
-      blockHash: null,
-      index: tx.index,
-      gasPrice: tx.gasPrice,
       gasLimit: tx.gasLimit,
-      gasUsed: null,
-      fee: null,
     });
 
     await this.transactionRepository.create(transaction);

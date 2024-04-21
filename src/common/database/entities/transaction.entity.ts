@@ -26,10 +26,10 @@ export class Transaction extends Timestamp {
   @Property({ type: 'char', length: 66, name: 'block_hash', nullable: true })
   blockHash!: string | null;
 
-  @Property({ type: 'int', name: 'index', nullable: false })
-  index!: number;
+  @Property({ type: 'int', name: 'index', nullable: true })
+  index!: number | null;
 
-  @Property({ type: 'bigint', name: 'gas_price', nullable: false })
+  @Property({ type: 'bigint', name: 'gas_price', nullable: true })
   gasPrice!: bigint;
 
   @Property({ type: 'int', name: 'gas_limit', nullable: false })

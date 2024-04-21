@@ -3,7 +3,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { AppConfigModule, AppConfigService } from '@config';
-import { Account } from '@common/database/entities';
+import { Account, Transaction } from '@common/database/entities';
 import { EthersModule } from '@libs/ethers';
 import { AccountController, WalletController } from './interface';
 import { AccountFactory, TransactionFactory, WalletFactory } from './domain';
@@ -69,7 +69,7 @@ const Adapters = [
   imports: [
     AppConfigModule,
     CqrsModule,
-    MikroOrmModule.forFeature({ entities: [Account] }),
+    MikroOrmModule.forFeature({ entities: [Account, Transaction] }),
     JwtModule.registerAsync({
       imports: [AppConfigModule],
       useFactory: (config: AppConfigService) => ({

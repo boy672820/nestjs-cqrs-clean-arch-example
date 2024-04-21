@@ -52,7 +52,6 @@ export class TokenContractImpl
       hash: tx.hash,
       nonce: tx.nonce,
       index: tx.index,
-      gasPrice: tx.gasPrice,
       gasLimit: tx.gasLimit,
     };
   }

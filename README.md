@@ -1,4 +1,4 @@
-# Nest.js Banking System Example for Microservices
+# Nest.js Ethereum Dapp: Banking System Example for Microservices
 
 This repository covers the implementation of a microservices architecture using Nest.js, focusing on the account transfer feature of a banking system. Through this example, you'll learn about Domain-Driven Design (DDD), applying Clean Architecture principles, and implementing the Command Query Responsibility Segregation (CQRS) pattern.
 
@@ -7,8 +7,6 @@ This repository covers the implementation of a microservices architecture using 
 The project is composed of the following components:
 
 - `account-service`: A microservice responsible for handling account-related business logic.
-- `transaction-service`: A microservice responsible for transaction processing and history management.
-- `api-gateway`: An API gateway that manages communication between clients and services.
 
 ## Key Learning Points
 

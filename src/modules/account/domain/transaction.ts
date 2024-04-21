@@ -8,8 +8,8 @@ export interface TransactionProperties {
   to: string;
   blockNumber: number | null;
   blockHash: string | null;
-  index: number;
-  gasPrice: bigint;
+  index: number | null;
+  gasPrice: bigint | null;
   gasLimit: bigint;
   gasUsed: number | null;
   fee: string | null;

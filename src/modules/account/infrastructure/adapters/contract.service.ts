@@ -12,7 +12,7 @@ export class ContractService implements IContractService {
     return balance;
   }
 
-  async transfer(eoa: string, amount: string): Promise<any> {
+  async transfer(eoa: string, amount: string) {
     const tx = await this.tokenContract.transfer(eoa, parseEther(amount));
     return tx;
   }

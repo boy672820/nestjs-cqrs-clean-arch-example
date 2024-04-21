@@ -1,8 +1,6 @@
 type TransferResponse = {
   hash: string;
   nonce: number;
-  index: number;
-  gasPrice: bigint;
   gasLimit: bigint;
 };
 

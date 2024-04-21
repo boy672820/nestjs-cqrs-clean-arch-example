@@ -4,7 +4,7 @@ export enum HistoryType {
 }
 
 export enum TransactionStatus {
-  Pending = 'PENDING',
-  Success = 'SUCCESS',
-  Failed = 'FAILED',
+  Pending = 'pending',
+  Success = 'success',
+  Failed = 'failed',
 }
